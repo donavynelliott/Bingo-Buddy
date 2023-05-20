@@ -54,4 +54,28 @@ class EventTest extends TestCase
             'type' => 'bingo',
         ]);
     }
+
+    /**
+     * Test that an event model can have users
+     */
+    public function test_event_model_can_have_users(): void
+    {
+        $event = Event::factory()->create([
+            'user_id' => $this->user->id,
+            'name' => 'Test Event',
+            'visibility' => 'public',
+            'type' => 'bingo',
+        ]);
+
+        // Attach a user to the event
+        $event->users()->attach($this->user->id);
+
+        // Assert that the user is attached to the event
+        $this->assertDatabaseHas('event_user', [
+            'event_id' => $event->id,
+            'user_id' => $this->user->id,
+        ]);
+
+        $this->assertTrue($event->users->contains($this->user));
+    }
 }

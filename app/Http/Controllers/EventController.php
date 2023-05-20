@@ -83,4 +83,47 @@ class EventController extends Controller
     {
         //
     }
+
+    /**
+     * Join the specified event.
+     */
+    public function join(Request $request, Event $event)
+    {
+        // Get the user making the request
+        $user = auth()->user();
+
+        // If the user is already in the event, redirect back
+        if ($event->users->contains($user)) {
+            return redirect()->back()->with('error', 'You are already in the event!');
+        }
+
+        // If event is public, attach the user to the event
+        // Add the user to the event
+        $event->users()->attach(auth()->id(), [
+            'name' => $request->name,
+        ]);
+
+        // Redirect to the event page
+        return redirect()->route('events.show', $event)->with('success', 'You have joined the event!');
+    }
+
+    /**
+     * Leave the specified event.
+     */
+    public function leave(Event $event)
+    {
+        // Get the user making the request
+        $user = auth()->user();
+
+        // If the user is not in the event, redirect back
+        if (!$event->users->contains($user)) {
+            return redirect()->back()->with('error', 'You are not in the event!');
+        }
+
+        // Remove the user from the event
+        $event->users()->detach(auth()->id());
+
+        // Redirect to the event page
+        return redirect()->route('events.show', $event)->with('success', 'You have left the event!');
+    }
 }

@@ -26,7 +26,9 @@ Route::middleware('auth')->group(function () {
 });
 
 // Dashboard
-Route::prefix('dashboard')->group(function() {
+Route::prefix('dashboard')
+    ->middleware(['auth', 'verified'])
+    ->group(function() {
     Route::get('/', function() {
         return view('dashboard');
     })->name('dashboard');
@@ -36,8 +38,10 @@ Route::prefix('dashboard')->group(function() {
         Route::get('/create', [EventController::class, 'create'])->name('events.create');
         Route::post('/store', [EventController::class, 'store'])->name('events.store');
         Route::get('/{event}', [EventController::class, 'show'])->name('events.show');
+        Route::post('/{event}/join', [EventController::class, 'join'])->name('events.join');
+        Route::post('/{event}/leave', [EventController::class, 'leave'])->name('events.leave');
     });
-})->middleware(['auth', 'verified']);
+});
 
 
 require __DIR__.'/auth.php';

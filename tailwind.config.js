@@ -18,6 +18,7 @@ export default {
         },
         colors: {
             teal: colors.teal,
+            red: colors.red,
         }
     },
 
