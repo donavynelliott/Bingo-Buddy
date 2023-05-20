@@ -15,11 +15,11 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                teal: colors.teal,
+                red: colors.red,
+            }
         },
-        colors: {
-            teal: colors.teal,
-            red: colors.red,
-        }
     },
 
     plugins: [forms],
