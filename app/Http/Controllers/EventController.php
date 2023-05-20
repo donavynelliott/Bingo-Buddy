@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class EventController extends Controller
 {
@@ -52,6 +53,10 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
+        if ($event == null) {
+            Log::error('Event not found');
+            abort(404);
+        }
         return view('dashboard.events.show', compact('event'));
     }
 
