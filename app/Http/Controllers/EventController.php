@@ -20,7 +20,7 @@ class EventController extends Controller
      */
     public function create()
     {
-        //
+        return view('dashboard.events.create');
     }
 
     /**
@@ -28,7 +28,23 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validate the request
+        $request->validate([
+            'name' => 'required|max:255|string',
+            'visibility' => 'required|in:public,private|string',
+            'type' => 'required|in:bingo,raffle|string',
+        ]);
+
+        // Create the event
+        $event = Event::create([
+            'name' => $request->name,
+            'visibility' => $request->visibility,
+            'type' => $request->type,
+            'user_id' => auth()->id(),
+        ]);
+
+        // Redirect to the event page
+        return redirect()->route('events.show', $event);
     }
 
     /**
@@ -36,7 +52,7 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
-        //
+        return view('dashboard.events.show', compact('event'));
     }
 
     /**
