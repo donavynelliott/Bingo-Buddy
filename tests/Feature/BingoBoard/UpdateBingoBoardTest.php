@@ -12,11 +12,17 @@ class UpdateBingoBoardTest extends TestCase
     use RefreshDatabase;
 
     // The squares that will be used to test the board
-    protected $squares = [
+    protected static $squares = [
         ['square 1', 'square 2', 'square 3'],
         ['square 4', 'square 5', 'square 6'],
         ['square 7', 'square 8', 'square 9']
     ];
+
+    protected static $updatedSquares = [
+            ['updated square 1', 'updated square 2', 'updated square 3'],
+            ['updated square 4', 'updated square 5', 'updated square 6'],
+            ['updated square 7', 'updated square 8', 'updated square 9']
+        ];
 
     protected $board = null;
 
@@ -50,7 +56,7 @@ class UpdateBingoBoardTest extends TestCase
 
         // Post the squares data to the update endpoint for bingo boards
         $response = $this->post('/dashboard/boards/update/' . $this->board->id, [
-            'squares' => $this->squares,
+            'squares' => self::$squares,
             'type' => 'blackout'
         ]);
 
@@ -66,7 +72,7 @@ class UpdateBingoBoardTest extends TestCase
 
         // Post the squares data to the update endpoint for bingo boards
         $response = $this->post('/dashboard/boards/update/' . $this->board->id, [
-            'squares' => $this->squares,
+            'squares' => self::$updatedSquares,
             'type' => 'blackout',
             'name' => 'New test Board'
         ]);
@@ -78,7 +84,7 @@ class UpdateBingoBoardTest extends TestCase
             'name' => 'New test Board',
             'user_id' => $this->board->user_id,
             'size' => $this->board->size,
-            'squares' => json_encode($this->squares),
+            'squares' => json_encode(self::$updatedSquares),
             'type' => 'blackout'
         ]);
     }
@@ -89,12 +95,19 @@ class UpdateBingoBoardTest extends TestCase
     public function test_board_squares_are_rendered_correctly(): void
     {
         $this->actingAs($this->user);
-        
+
+        // updated the squares
+        $this->board->squares = json_encode(self::$updatedSquares);
+        $this->board->save();
+
         // Visit the page of the previously created board
         $response = $this->get('/dashboard/boards/' . $this->board->id);
+        $response->assertStatus(200);
+
+        $this->assertTrue($this->board->squares !== null);
 
         // We should see all the values from the squares array
-        foreach ($this->squares as $row) {
+        foreach (self::$updatedSquares as $row) {
             foreach ($row as $square) {
                 $response->assertSee($square);
             }

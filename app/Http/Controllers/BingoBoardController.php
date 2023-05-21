@@ -105,7 +105,7 @@ class BingoBoardController extends Controller
             Log::error('Bingo board update failed validation');
             // Log errors
             Log::error($validator->errors());
-            return redirect()->route('boards.show', $bingoBoard)->withErrors($validator->errors());
+            return redirect()->route('boards.edit', $bingoBoard)->withErrors($validator->errors());
         }
 
         // Update the board
@@ -114,8 +114,8 @@ class BingoBoardController extends Controller
         $bingoBoard->type = $request->type;
         $bingoBoard->save();
 
-        // Log the board was saved
-        Log::info('Bingo board updated successfully');
+        // Log the board was saved successfully
+        Log::info('Bingo board ' . $bingoBoard->id . ' was updated successfully');
 
         // Redirect to the board page
         return redirect()->route('boards.show', $bingoBoard)->with('success', 'Bingo board updated successfully!');

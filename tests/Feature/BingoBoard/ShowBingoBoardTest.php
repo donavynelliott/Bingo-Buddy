@@ -59,4 +59,31 @@ class ShowBingoBoardTest extends TestCase
 
         $response->assertSee($this->board->squares);
     }
+
+    /**
+     * Test the edit button is present if the user is the owner of the board
+     * and not present if the user is not the owner of the board
+     */
+    public function test_edit_button_is_present_if_user_is_owner(): void
+    {
+        $response = $this->get('/dashboard/boards/' . $this->board->id);
+
+        $response->assertStatus(200);
+
+        $this->assertTrue($this->user->id === $this->board->user_id);
+
+        $response->assertSee('Edit Board');
+
+        $user2 = User::factory()->create();
+
+        $this->actingAs($user2);
+
+        $response = $this->get('/dashboard/boards/' . $this->board->id);
+
+        $response->assertStatus(200);
+
+        $this->assertTrue($user2->id !== $this->board->user_id);
+
+        $response->assertDontSee('Edit Board');
+    }
 }

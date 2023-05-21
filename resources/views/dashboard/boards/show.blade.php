@@ -23,91 +23,31 @@
                         <p class="text-gray-700">Size: {{ $bingoBoard->size }}x{{ $bingoBoard->size }}</p>
                         <p class="text-gray-700">Type: {{ $bingoBoard->type }}</p>
                     </div>
-                    <form id="update-board" action="{{ route('boards.update', ['bingoBoard' => $bingoBoard]) }}" method="POST">
-                        <!-- Create a set of square input boxes based on the size -->
-                        <div class="grid grid-cols-{{ $bingoBoard->size }} gap-4">
-                            @foreach ($bingoBoard->getBoardData() as $rowKey => $row)
-                                @foreach ($row as $colKey => $col)
-                                <!-- Display each column as a card and not as an input-->
-                                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                                    <div class="p-6 text-gray-900">
-                                        <p class="text-gray-700">Square {{ $rowKey }}-{{ $colKey }}</p>
-                                        <p class="text-gray-700">{{ $col }}</p>
-                                    </div>
-                                </div>
-                                @endforeach
-                            @endforeach
+
+                    <!-- Create a set of square input boxes based on the size -->
+                    <div class="grid grid-cols-{{ $bingoBoard->size }} gap-4">
+                        @foreach ($bingoBoard->getBoardData() as $rowKey => $row)
+                        @foreach ($row as $colKey => $col)
+                        <!-- Display each column as a card and not as an input-->
+                        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                            <div class="p-6 text-gray-900">
+                                <p class="text-gray-700">Square {{ $rowKey }}-{{ $colKey }}</p>
+                                <p class="text-gray-700">{{ $col }}</p>
+                            </div>
                         </div>
-                        <div class="flex justify-end mt-4">
-                            <button type="submit" class="bg-teal-500 text-white px-4 py-3 rounded font-medium w-full">Update Board</button>
-                        </div>
-                    </form>
+                        @endforeach
+                        @endforeach
+                    </div>
+
+                    <!-- Edit Button if owner -->
+                    @if ($bingoBoard->user_id === Auth::user()->id)
+                    <div class="flex justify-end mt-4">
+                        <a href="{{ route('boards.edit', ['bingoBoard' => $bingoBoard]) }}" class="bg-teal-500 text-white px-4 py-3 rounded font-medium w-full">Edit Board</a>
+                    </div>
+                    @endif
+
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Inline script that submits the form as an array -->
-    <script>
-        $(document).ready(function() {
-            $('#update-board').submit(function(e) {
-                e.preventDefault();
-                var form = $(this);
-                var url = form.attr('action');
-                var method = form.attr('method');
-                var squares = serializeSquares(form.serializeArray());
-                var data = {
-                    _token: '{{ csrf_token() }}',
-                    squares: squares
-                };
-                console.log(data)
-                $.ajax({
-                    url: url,
-                    type: method,
-                    data: data,
-                    success: function(response) {
-
-                    },
-                    error: function(response) {
-
-                    }
-                });
-            });
-
-            function serializeSquares(data) {
-                // Example Data: [{name: 'square-0-0', value: ''}, {name: 'square-0-1', value: ''}, {name: 'square-0-2', value: ''}, {name: 'square-1-0', value: ''}, {name: 'square-1-1', value: ''}, etc...]
-                // Example submission: [ ['square 1', 'square 2', 'square 3'], ['square 4', 'square 5', 'square 6'], ['square 7', 'square 8', 'square 9'] ]
-
-                // Create a new array to store the data
-                var submission = [];
-
-                for (var i = 0; i < data.length; i++) {
-                    // Split the name into an array
-                    var name = data[i].name.split('-');
-                    if (name === '_token') {
-                        continue;
-                    }
-
-                    // Get the row number
-                    var row = name[1];
-                    // Get the column number
-                    var col = name[2];
-                    // Get the value
-                    var value = data[i].value;
-
-                    // If the row doesn't exist in the submission array, create it
-                    if (typeof submission[row] === 'undefined') {
-                        submission[row] = [];
-                    }
-
-                    // Add the value to the submission array
-                    submission[row][col] = value;
-                }
-
-                // Return the submission array
-                return submission;
-            }
-        });
-    </script>
-
 </x-app-layout>

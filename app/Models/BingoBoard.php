@@ -10,10 +10,10 @@ class BingoBoard extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'size', 'squares', 'user_id'];
+    protected $fillable = ['name', 'size', 'squares', 'user_id', 'type'];
 
     protected $casts = [
-        'squares' => 'array'
+        'squares' => 'array',
     ];
     
     /**
