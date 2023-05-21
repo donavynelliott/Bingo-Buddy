@@ -25,6 +25,7 @@ class CreateBingoBoardTest extends TestCase
         // Assert that all of the required fields are present
         $response->assertSee('Name');
         $response->assertSee('Size');
+        $response->assertSee('Type');
     }
 
     /**
@@ -38,6 +39,7 @@ class CreateBingoBoardTest extends TestCase
         $response = $this->post('/dashboard/boards/store', [
             'name' => 'Test Board',
             'size' => 5,
+            'type' => 'blackout'
         ]);
 
         // Get the id of the newly created board
@@ -63,8 +65,9 @@ class CreateBingoBoardTest extends TestCase
         $response = $this->post('/dashboard/boards/store', [
             'name' => '',
             'size' => 5,
+            'type' => '',
         ]);
 
-        $response->assertSessionHasErrors(['name']);
+        $response->assertSessionHasErrors(['name', 'type']);
     }
 }

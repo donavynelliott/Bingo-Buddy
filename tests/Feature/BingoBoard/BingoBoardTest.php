@@ -44,19 +44,22 @@ class BingoBoardTest extends TestCase
         $boardSquares = "[['square 1', 'square 2', 'square 3'],
             ['square 4', 'square 5', 'square 6'],
             ['square 7', 'square 8', 'square 9']]";
+        $boardType = 'blackout';
 
         $bingoBoard = new BingoBoard();
         $bingoBoard->user_id = $this->user->id;
         $bingoBoard->name = $boardName;
         $bingoBoard->size = $boardSize;
         $bingoBoard->squares = $boardSquares;
+        $bingoBoard->type = $boardType;
         $bingoBoard->save();
 
         $this->assertDatabaseHas('bingo_boards', [
             'name' => $boardName,
             'user_id' => $this->user->id,
             'size' => $boardSize,
-            'squares' => $boardSquares
+            'squares' => $boardSquares,
+            'type' => $boardType,
         ]);
     }
 

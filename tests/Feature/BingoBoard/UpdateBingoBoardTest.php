@@ -7,7 +7,7 @@ use App\Models\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class BoardSquaresTest extends TestCase
+class UpdateBingoBoardTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -35,12 +35,13 @@ class BoardSquaresTest extends TestCase
         $this->board->user_id = $this->user->id;
         $this->board->name = "Test Board";
         $this->board->size = 3;
+        $this->board->type = "classic";
 
         $this->board->save();
     }
 
     /**
-     * Test that the board squares can be submitted
+     * Test that the board squares and board type can be submitted
      */
     public function test_board_squares_can_be_submitted(): void
     {
@@ -48,7 +49,8 @@ class BoardSquaresTest extends TestCase
 
         // Post the squares data to the update endpoint for bingo boards
         $response = $this->post('/dashboard/boards/update/' . $this->board->id, [
-            'squares' => $this->squares
+            'squares' => $this->squares,
+            'type' => 'blackout'
         ]);
 
         // Assert that the board was created successfully
@@ -58,7 +60,8 @@ class BoardSquaresTest extends TestCase
             'name' => $this->board->name,
             'user_id' => $this->board->user_id,
             'size' => $this->board->size,
-            'squares' => json_encode($this->squares)
+            'squares' => json_encode($this->squares),
+            'type' => 'blackout'
         ]);
     }
 

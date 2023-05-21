@@ -28,6 +28,14 @@
                                 <option value="6">6x6</option>
                             </select>
                         </div>
+                        <div class="mb-4">
+                            <!-- Choose between classic or blackout -->
+                            <label for="type" class="sr-only">Type</label>
+                            <select name="type" id="type" class="bg-gray-100 border-2 w-full p-4 rounded-lg">
+                                <option value="classic">Classic</option>
+                                <option value="blackout">Blackout</option>
+                            </select>
+                        </div>
                         <div>
                             <button type="submit" class="bg-teal-500 text-white px-4 py-3 rounded font-medium w-full">Create Board</button>
                         </div>

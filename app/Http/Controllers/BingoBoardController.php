@@ -34,12 +34,14 @@ class BingoBoardController extends Controller
         $request->validate([
             'name' => 'required|max:255|string',
             'size' => 'required|integer',
+            'type' => 'required|in:blackout,classic'
         ]);
 
         // Create the board
         $board = BingoBoard::create([
             'name' => $request->name,
             'size' => $request->size,
+            'type' => $request->type,
             'user_id' => auth()->id(),
         ]);
 
@@ -83,7 +85,8 @@ class BingoBoardController extends Controller
                         'each' => 'string|max:255'
                     ]);
                 }
-            ]
+            ],
+            'type' => 'required|in:blackout,classic'
         ]);
 
         if ($validator->fails()) {
@@ -95,6 +98,7 @@ class BingoBoardController extends Controller
 
         // Update the board
         $bingoBoard->squares = json_encode($request->squares);
+        $bingoBoard->type = $request->type;
         $bingoBoard->save();
 
         // Log the board was saved
