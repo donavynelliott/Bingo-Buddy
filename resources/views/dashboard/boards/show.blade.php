@@ -24,20 +24,22 @@
                         <p class="text-gray-700">Type: {{ $bingoBoard->type }}</p>
                     </div>
 
+                    <!-- Trick tailwind css into including grid utlities -->
+                    <div class="grid-cols-3 grid-cols-4 grid-cols-5 grid-cols-6" style="display:none;"></div>
+
                     <!-- Create a set of square input boxes based on the size -->
-                    <div class="grid grid-cols-{{ $bingoBoard->size }} gap-4">
+                    <div class="grid grid-cols-{{ $bingoBoard->size }} divide-x divide-y border border-black h-full">
                         @foreach ($bingoBoard->getBoardData() as $rowKey => $row)
                         @foreach ($row as $colKey => $col)
-                        <!-- Display each column as a card and not as an input-->
-                        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                            <div class="p-6 text-gray-900">
-                                <p class="text-gray-700">Square {{ $rowKey }}-{{ $colKey }}</p>
-                                <p class="text-gray-700">{{ $col }}</p>
+                        <div class="bg-white overflow-hidden border-slate-200 aspect-square flex justify-center items-center">
+                            <div class="text-gray-900 text-center">
+                                {{ $col }}
                             </div>
                         </div>
                         @endforeach
                         @endforeach
                     </div>
+
 
                     <!-- Edit Button if owner -->
                     @if ($bingoBoard->user_id === Auth::user()->id)
