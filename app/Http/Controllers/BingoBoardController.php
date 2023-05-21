@@ -20,7 +20,7 @@ class BingoBoardController extends Controller
      */
     public function create()
     {
-        //
+        return view('dashboard.boards.create');
     }
 
     /**

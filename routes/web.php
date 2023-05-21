@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\BingoBoardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,18 +30,25 @@ Route::middleware('auth')->group(function () {
 Route::prefix('dashboard')
     ->middleware(['auth', 'verified'])
     ->group(function() {
-    Route::get('/', function() {
-        return view('dashboard');
-    })->name('dashboard');
+        // Dashboard
+        Route::get('/', function() {
+            return view('dashboard');
+        })->name('dashboard');
 
-    // Events
-    Route::prefix('events')->group(function() {
-        Route::get('/create', [EventController::class, 'create'])->name('events.create');
-        Route::post('/store', [EventController::class, 'store'])->name('events.store');
-        Route::get('/{event}', [EventController::class, 'show'])->name('events.show');
-        Route::post('/{event}/join', [EventController::class, 'join'])->name('events.join');
-        Route::post('/{event}/leave', [EventController::class, 'leave'])->name('events.leave');
-    });
+        // Events
+        Route::prefix('events')->group(function() {
+            Route::get('/create', [EventController::class, 'create'])->name('events.create');
+            Route::post('/store', [EventController::class, 'store'])->name('events.store');
+            Route::get('/{event}', [EventController::class, 'show'])->name('events.show');
+            Route::post('/{event}/join', [EventController::class, 'join'])->name('events.join');
+            Route::post('/{event}/leave', [EventController::class, 'leave'])->name('events.leave');
+        });
+
+        // Bingo Boards
+        Route::prefix('boards')->group(function() {
+            Route::get('/create', [BingoBoardController::class, 'create'])->name('boards.create');
+            Route::post('/store', [BingoBoardController::class, 'store'])->name('boards.store');
+        });
 });
 
 
