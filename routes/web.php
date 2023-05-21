@@ -49,6 +49,7 @@ Route::prefix('dashboard')
             Route::get('/create', [BingoBoardController::class, 'create'])->name('boards.create');
             Route::post('/store', [BingoBoardController::class, 'store'])->name('boards.store');
             Route::get('/{bingoBoard}', [BingoBoardController::class, 'show'])->name('boards.show');
+            Route::post('/update/{bingoBoard}', [BingoBoardController::class, 'update'])->name('boards.update');
         });
 });
 
