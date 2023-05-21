@@ -28,7 +28,21 @@ class BingoBoardController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validated the board data
+        $request->validate([
+            'name' => 'required|max:255|string',
+            'size' => 'required|integer',
+        ]);
+
+        // Create the board
+        $board = BingoBoard::create([
+            'name' => $request->name,
+            'size' => $request->size,
+            'user_id' => auth()->id(),
+        ]);
+
+        // Redirect to the board page
+        return redirect()->route('boards.show', $board)->with('success', 'Bingo board created successfully!');
     }
 
     /**
@@ -36,7 +50,7 @@ class BingoBoardController extends Controller
      */
     public function show(BingoBoard $bingoBoard)
     {
-        //
+        return view('dashboard.boards.show', compact('bingoBoard'));
     }
 
     /**

@@ -26,4 +26,45 @@ class CreateBingoBoardTest extends TestCase
         $response->assertSee('Name');
         $response->assertSee('Size');
     }
+
+    /**
+     * Test form can be submitted successfully
+     */
+    public function test_form_can_be_submitted_successfully(): void
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $response = $this->post('/dashboard/boards/store', [
+            'name' => 'Test Board',
+            'size' => 5,
+        ]);
+
+        // Get the id of the newly created board
+        $board = BingoBoard::where('name', 'Test Board')->first();
+
+        $response->assertRedirect('/dashboard/boards/' . $board->id);
+        $response->assertSessionHas('success');
+
+        $this->assertDatabaseHas('bingo_boards', [
+            'name' => 'Test Board',
+            'size' => 5,
+        ]);
+    }
+
+    /**
+     * Test form cannot be submitted with invalid data
+     */
+    public function test_form_cannot_be_submitted_with_invalid_data(): void
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $response = $this->post('/dashboard/boards/store', [
+            'name' => '',
+            'size' => 5,
+        ]);
+
+        $response->assertSessionHasErrors(['name']);
+    }
 }

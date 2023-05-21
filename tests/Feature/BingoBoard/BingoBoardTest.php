@@ -59,4 +59,29 @@ class BingoBoardTest extends TestCase
             'squares' => $boardSquares
         ]);
     }
+
+    /**
+     * Test the model can output a default empty board
+     */
+    public function test_bingo_board_model_can_output_a_default_empty_board(): void
+    {
+        // Test if the board outputs correctly for a 3x3 board
+        $smallBoard = BingoBoard::getEmptyBoard(3);
+        $this->assertEquals($smallBoard, [
+            ['', '', ''],
+            ['', '', ''],
+            ['', '', '']
+        ]);
+
+        // Test if the board outputs correctly for a 6x6 board
+        $largeBoard = BingoBoard::getEmptyBoard(6);
+        $this->assertEquals($largeBoard, [
+            ['', '', '', '', '', ''],
+            ['', '', '', '', '', ''],
+            ['', '', '', '', '', ''],
+            ['', '', '', '', '', ''],
+            ['', '', '', '', '', ''],
+            ['', '', '', '', '', ''],
+        ]);
+    }
 }

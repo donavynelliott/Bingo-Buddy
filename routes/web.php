@@ -48,6 +48,7 @@ Route::prefix('dashboard')
         Route::prefix('boards')->group(function() {
             Route::get('/create', [BingoBoardController::class, 'create'])->name('boards.create');
             Route::post('/store', [BingoBoardController::class, 'store'])->name('boards.store');
+            Route::get('/{bingoBoard}', [BingoBoardController::class, 'show'])->name('boards.show');
         });
 });
 
