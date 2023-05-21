@@ -18,6 +18,14 @@
                 <!-- Event Details -->
                 <div class="p-6 text-gray-900">
                     <h1 class="text-3xl text-gray-900 font-bold mb-4">{{ $bingoBoard->name }}</h1>
+                    <!-- Create a set of square input boxes based on the size -->
+                    <div class="grid grid-cols-{{ $bingoBoard->size }} gap-4">
+                        @foreach ($bingoBoard->getBoardData() as $rowKey => $row)
+                            @foreach ($row as $colKey => $col)
+                                <input type="text" name="square-{{ $rowKey }}-{{ $colKey }}" id="square-{{ $rowKey }}-{{ $colKey }}" placeholder="Square {{ $rowKey }}-{{ $colKey }}" class="bg-gray-100 border-2 w-full p-4 rounded-lg" value="{{ $col }}">
+                            @endforeach
+                        @endforeach
+                    </div>
                 </div>
             </div>
         </div>

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class BingoBoard extends Model
 {
@@ -14,10 +15,20 @@ class BingoBoard extends Model
     protected $casts = [
         'squares' => 'array'
     ];
-
-    protected $attributes = [
-        'squares' => '[]'
-    ];
+    
+    /**
+     * Get the data structure for the board. Return a new empty board if the current one is empty
+     * 
+     * @return array
+     */
+    public function getBoardData(): array
+    {
+        if ($this->squares === null) {
+            return self::getEmptyBoard($this->size);
+        } else {
+            return json_decode($this->squares);
+        }
+    }
 
     /**
      * Get a empty board data structure

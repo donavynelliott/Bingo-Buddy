@@ -84,4 +84,26 @@ class BingoBoardTest extends TestCase
             ['', '', '', '', '', ''],
         ]);
     }
+
+    /**
+     * Test the model can output a default empty board when the currently saved board is empty
+     */
+    public function test_bingo_board_model_can_output_a_default_empty_board_when_the_currently_saved_board_is_empty(): void
+    {
+        $boardName = "Test Bingo Board";
+        $boardSize = 4;
+
+        $bingoBoard = new BingoBoard();
+        $bingoBoard->user_id = $this->user->id;
+        $bingoBoard->name = $boardName;
+        $bingoBoard->size = $boardSize;
+        $bingoBoard->save();
+
+        $this->assertEquals(json_encode($bingoBoard->getBoardData()), json_encode([
+            ['', '', '', ''],
+            ['', '', '', ''],
+            ['', '', '', ''],
+            ['', '', '', '']
+        ]));
+    }
 }
