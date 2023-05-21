@@ -11,6 +11,31 @@
                 <div class="p-6 text-gray-900">
                     {{ __("You're logged in!") }}
                 </div>
+
+                <!-- Display any events that the user is attached to -->
+                @if ($memberEvents->count() > 0)
+                <div class="p-6 text-gray-900">
+                    <h1 class="text-3xl text-gray-900 font-bold mb-4">Events you are a member of</h1>
+                    <ul>
+                        @foreach ($memberEvents as $event)
+                        <li><a href="{{ route('events.show', ['event' => $event]) }}">{{ $event->name }}</a></li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
+
+                <!-- Display any events the user is the owner of -->
+                @if ($ownedEvents->count() > 0)
+                <div class="p-6 text-gray-900">
+                    <h1 class="text-3xl text-gray-900 font-bold mb-4">Events you own</h1>
+                    <ul>
+                        @foreach ($ownedEvents as $event)
+                        <li><a href="{{ route('events.show', ['event' => $event]) }}">{{ $event->name }}</a></li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
+                
             </div>
         </div>
     </div>

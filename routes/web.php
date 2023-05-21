@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\BingoBoardController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,9 +32,7 @@ Route::prefix('dashboard')
     ->middleware(['auth', 'verified'])
     ->group(function() {
         // Dashboard
-        Route::get('/', function() {
-            return view('dashboard');
-        })->name('dashboard');
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
         // Events
         Route::prefix('events')->group(function() {

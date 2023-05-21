@@ -42,4 +42,24 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * The events the user is the owner of
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function events(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Event::class);
+    }
+
+    /**
+     * Finds the events the user is attached to by using the pivot table
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function eventsAttachedTo(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Event::class);
+    }
 }
