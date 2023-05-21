@@ -62,7 +62,13 @@ class BingoBoardController extends Controller
      */
     public function edit(BingoBoard $bingoBoard)
     {
-        //
+        // If not the owner of the board, return a 403
+        if ($bingoBoard->user_id !== auth()->id()) {
+            Log::error('User ' . auth()->id() . ' attempted to edit board ' . $bingoBoard->id . ' but is not the owner');
+            return response()->json(['error' => 'You are not the owner of this board'], 403);
+        }
+
+        return view('dashboard.boards.edit', compact('bingoBoard'));
     }
 
     /**
@@ -70,6 +76,11 @@ class BingoBoardController extends Controller
      */
     public function update(Request $request, BingoBoard $bingoBoard)
     {
+        // If not the owner of the board, return a 403
+        if ($bingoBoard->user_id !== auth()->id()) {
+            Log::error('User ' . auth()->id() . ' attempted to update board ' . $bingoBoard->id . ' but is not the owner');
+            return response()->json(['error' => 'You are not the owner of this board'], 403);
+        }
         $validator = Validator::make($request->all(), [
             // Validation 1. Ensure that the submitted json object has the correct amount of rows
             'squares' => [
@@ -86,6 +97,7 @@ class BingoBoardController extends Controller
                     ]);
                 }
             ],
+            'name' => 'required|max:255|string',
             'type' => 'required|in:blackout,classic'
         ]);
 
@@ -98,6 +110,7 @@ class BingoBoardController extends Controller
 
         // Update the board
         $bingoBoard->squares = json_encode($request->squares);
+        $bingoBoard->name = $request->name;
         $bingoBoard->type = $request->type;
         $bingoBoard->save();
 

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __($bingoBoard->name) }}
+            {{ __("Edit Bingo Board") }}
         </h2>
     </x-slot>
 
@@ -17,25 +17,28 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <!-- Event Details -->
                 <div class="p-6 text-gray-900">
-                    <h1 class="text-3xl text-gray-900 font-bold mb-4">{{ $bingoBoard->name }}</h1>
-                    <!-- Board Properties -->
-                    <div class="mb-4">
-                        <p class="text-gray-700">Size: {{ $bingoBoard->size }}x{{ $bingoBoard->size }}</p>
-                        <p class="text-gray-700">Type: {{ $bingoBoard->type }}</p>
-                    </div>
+                    <h1 class="text-3xl text-gray-900 font-bold mb-4">Edit {{ $bingoBoard->name }}</h1>
                     <form id="update-board" action="{{ route('boards.update', ['bingoBoard' => $bingoBoard]) }}" method="POST">
+                        <!-- Board Name -->
+                        <div class="mb-4">
+                            <label for="name" class="sr-only">Name</label>
+                            <input type="text" name="name" id="name" placeholder="Board Name" class="bg-gray-100 border-2 w-full p-4 rounded-lg" value="{{ $bingoBoard->name }}">
+                        </div>
+                        <!-- Board Type [Classic,Blackout] -->
+                        <div class="mb-4">
+                            <label for="type" class="sr-only">Type</label>
+                            <select name="type" id="type" class="bg-gray-100 border-2 w-full p-4 rounded-lg">
+                                <option value="classic" @if ($bingoBoard->type === 'classic') selected @endif>Classic</option>
+                                <option value="blackout" @if ($bingoBoard->type === 'blackout') selected @endif>Blackout</option>
+                            </select>
+                        </div>
+                        
                         <!-- Create a set of square input boxes based on the size -->
                         <div class="grid grid-cols-{{ $bingoBoard->size }} gap-4">
                             @foreach ($bingoBoard->getBoardData() as $rowKey => $row)
-                                @foreach ($row as $colKey => $col)
-                                <!-- Display each column as a card and not as an input-->
-                                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                                    <div class="p-6 text-gray-900">
-                                        <p class="text-gray-700">Square {{ $rowKey }}-{{ $colKey }}</p>
-                                        <p class="text-gray-700">{{ $col }}</p>
-                                    </div>
-                                </div>
-                                @endforeach
+                            @foreach ($row as $colKey => $col)
+                            <input type="text" name="square-{{ $rowKey }}-{{ $colKey }}" id="square-{{ $rowKey }}-{{ $colKey }}" placeholder="Square {{ $rowKey }}-{{ $colKey }}" class="bg-gray-100 border-2 w-full p-4 rounded-lg" value="{{ $col }}">
+                            @endforeach
                             @endforeach
                         </div>
                         <div class="flex justify-end mt-4">

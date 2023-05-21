@@ -41,6 +41,23 @@ class UpdateBingoBoardTest extends TestCase
     }
 
     /**
+     * Test that the board cannot be updated by a user that is not the owner
+     */
+    public function test_board_cannot_be_updated_by_user_that_is_not_owner(): void
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        // Post the squares data to the update endpoint for bingo boards
+        $response = $this->post('/dashboard/boards/update/' . $this->board->id, [
+            'squares' => $this->squares,
+            'type' => 'blackout'
+        ]);
+
+        $response->assertStatus(403);
+    }
+
+    /**
      * Test that the board squares and board type can be submitted
      */
     public function test_board_squares_can_be_submitted(): void
@@ -50,14 +67,15 @@ class UpdateBingoBoardTest extends TestCase
         // Post the squares data to the update endpoint for bingo boards
         $response = $this->post('/dashboard/boards/update/' . $this->board->id, [
             'squares' => $this->squares,
-            'type' => 'blackout'
+            'type' => 'blackout',
+            'name' => 'New test Board'
         ]);
 
         // Assert that the board was created successfully
         $response->assertRedirect('/dashboard/boards/' . $this->board->id);
         $response->assertSessionHas('success');
         $this->assertDatabaseHas('bingo_boards', [
-            'name' => $this->board->name,
+            'name' => 'New test Board',
             'user_id' => $this->board->user_id,
             'size' => $this->board->size,
             'squares' => json_encode($this->squares),
