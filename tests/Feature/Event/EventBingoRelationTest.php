@@ -78,5 +78,4 @@ class EventBingoRelationTest extends TestCase
         $this->assertEquals($bingoBoard->id, $event->bingoBoards()->first()->id);
         $this->assertEquals($bingoBoard2->id, $event->bingoBoards()->get()[1]->id);
     }
-
 }

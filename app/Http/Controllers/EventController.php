@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BingoBoard;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -128,5 +129,42 @@ class EventController extends Controller
 
         // Redirect to the event page
         return redirect()->route('events.show', $event)->with('success', 'You have left the event!');
+    }
+
+    /**
+     * Associate the specified bingo board with the event.
+     */
+    public function attachBoard(Request $request, Event $event)
+    {
+        // Get the bingo board
+        $bingoBoard = BingoBoard::find($request->bingo_board_id);
+
+        // If Event or Board is not owned by the user, give 403
+        if ($event->user_id != auth()->id() || $bingoBoard->user_id != auth()->id()) {
+            Log::alert('User tried to attach a bingo board to an event that they do not own', [
+                'event' => $event,
+                'bingoBoard' => $bingoBoard,
+                'event_user_id' => $event->user_id,
+                'bingoBoard_user_id' => $bingoBoard->user_id,
+                'user_id' => auth()->id(),
+            ]);
+            abort(403);
+        }
+
+        // If the bingo board is already attached to the event, redirect back
+        if ($event->bingoBoards->contains($bingoBoard)) {
+            return redirect()->back()->with('error', 'Bingo board is already attached to the event!');
+        }
+
+        // Attach the bingo board to the event
+        $event->bingoBoards()->attach($bingoBoard);
+
+        Log::alert('Bingo board attached to event', [
+            'event' => $event,
+            'bingoBoard' => $bingoBoard,
+        ]);
+
+        // Redirect to the event page
+        return redirect()->route('events.show', $event)->with('success', 'Bingo board has been attached to the event!');
     }
 }
