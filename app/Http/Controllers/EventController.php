@@ -6,6 +6,7 @@ use App\Models\BingoBoard;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 class EventController extends Controller
 {
@@ -136,28 +137,49 @@ class EventController extends Controller
      */
     public function attachBoard(Request $request, Event $event)
     {
-        // Get the bingo board
-        $bingoBoard = BingoBoard::find($request->bingo_board_id);
 
-        // If Event or Board is not owned by the user, give 403
-        if ($event->user_id != auth()->id() || $bingoBoard->user_id != auth()->id()) {
-            Log::alert('User tried to attach a bingo board to an event that they do not own', [
-                'event' => $event,
-                'bingoBoard' => $bingoBoard,
-                'event_user_id' => $event->user_id,
-                'bingoBoard_user_id' => $bingoBoard->user_id,
-                'user_id' => auth()->id(),
+        // If user doesn't own the event return 403
+        if ($event->user_id != auth()->id()) {
+            return abort(403);
+        }
+        
+        // Validate the bingo_board_ids array
+        try {
+            $request->validate([
+                'bingo_board_id' => 'required|exists:bingo_boards,id',
             ]);
-            abort(403);
+        } catch (ValidationException $e) {
+            Log::error('Validation error', [
+                'exception' => $e,
+            ]);
         }
 
+        $boardsToAttach = [];
+        // For each bingo_board_id
+        foreach ($request->bingo_board_ids as $bingo_board_id) {
+            $bingoBoard = BingoBoard::find($bingo_board_id);
+            // If board is null, give 500
+            if ($bingoBoard == null) {
+                abort(500);
+            }
+
+            // If board is not owned by the user, give 403
+            if ($bingoBoard->user_id != auth()->id()) {
+                abort(403);
+            }
+
+            $boardsToAttach[] = $bingoBoard;
+        }
+        
         // If the bingo board is already attached to the event, redirect back
         if ($event->bingoBoards->contains($bingoBoard)) {
             return redirect()->back()->with('error', 'Bingo board is already attached to the event!');
         }
 
         // Attach the bingo board to the event
-        $event->bingoBoards()->attach($bingoBoard);
+        foreach ($boardsToAttach as $board) {
+            $event->bingoBoards()->attach($board);
+        }
 
         Log::alert('Bingo board attached to event', [
             'event' => $event,

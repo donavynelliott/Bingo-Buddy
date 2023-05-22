@@ -98,7 +98,7 @@ class ShowEventTest extends TestCase
         $bingoBoard->save();
 
         $response = $this->post('/dashboard/events/' . $event->id . '/boards', [
-            'bingo_board_id' => $bingoBoard->id,
+            'bingo_board_ids' => [$bingoBoard->id],
         ]);
 
         $response->assertStatus(302);
@@ -153,19 +153,19 @@ class ShowEventTest extends TestCase
         $this->actingAs($userA);
         // Let User A try to attach boardB to eventA (should fail)
         $response = $this->post('/dashboard/events/' . $eventA->id . '/boards', [
-            'bingo_board_id' => $boardB->id,
+            'bingo_board_ids' => [$boardB->id],
         ]);
         $response->assertStatus(403);
 
         // Let User A try to attach boardA to eventA (should succeed)
         $response = $this->post('/dashboard/events/' . $eventA->id . '/boards', [
-            'bingo_board_id' => $boardA->id,
+            'bingo_board_ids' => [$boardA->id],
         ]);
         $response->assertStatus(302);
 
         // Let User A try to attach boardA to eventB (should fail)
         $response = $this->post('/dashboard/events/' . $eventB->id . '/boards', [
-            'bingo_board_id' => $boardA->id,
+            'bingo_board_ids' => [$boardA->id],
         ]);
         $response->assertStatus(403);
     }
