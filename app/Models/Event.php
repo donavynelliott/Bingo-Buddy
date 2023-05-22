@@ -20,4 +20,13 @@ class Event extends Model
         // Get the related Event_User pivot model
         return $this->belongsToMany(User::class)->using(Event_User::class);
     }
+
+    /**
+     * The boards that belong to the event
+     */
+    public function bingoBoards(): BelongsToMany
+    {
+        // Get the related Event_Board pivot model
+        return $this->belongsToMany(BingoBoard::class, 'event_board')->using(Event_Board::class);
+    }
 }
