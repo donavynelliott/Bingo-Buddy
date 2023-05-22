@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Dashboard;
 
+use App\Models\BingoBoard;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\Event;
@@ -43,5 +44,33 @@ class ShowEventTest extends TestCase
         $response->assertSee($event->name);
         $response->assertSee(ucfirst($event->visibility));
         $response->assertSee(ucfirst($event->type));
+    }
+
+    /**
+     * Test we can see the bingo boards attached to an event
+     */
+    public function test_can_see_bingo_boards_attached_to_an_event(): void
+    {
+        $event = Event::factory()->create([
+            'user_id' => $this->user->id,
+            'name' => 'Test Event',
+            'visibility' => 'public',
+            'type' => 'bingo',
+        ]);
+
+        $bingoBoard = BingoBoard::factory()->create([
+            'user_id' => $this->user->id,
+            'name' => 'Test Bingo Board',
+            'size' => 5,
+            'type' => 'classic',
+        ]);
+
+        $event->bingoBoards()->attach($bingoBoard);
+
+        $response = $this->get('/dashboard/events/' . $event->id);
+
+        $response->assertStatus(200);
+
+        $response->assertSee('Test Bingo Board');
     }
 }

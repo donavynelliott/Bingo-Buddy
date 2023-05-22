@@ -57,7 +57,10 @@ class EventController extends Controller
             Log::error('Event not found');
             abort(404);
         }
-        return view('dashboard.events.show', compact('event'));
+
+        $bingoBoards = $event->bingoBoards()->get();
+
+        return view('dashboard.events.show', compact('event', 'bingoBoards'));
     }
 
     /**
