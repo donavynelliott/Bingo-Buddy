@@ -70,7 +70,8 @@ class EventController extends Controller
      */
     public function edit(Event $event)
     {
-        //
+        $boards = BingoBoard::where('user_id', auth()->id())->get();
+        return view('dashboard.events.edit', compact(['event', 'boards']));
     }
 
     /**
@@ -78,7 +79,70 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
-        //
+
+        // If user doesn't own the event return 403
+        if ($event->user_id != auth()->id()) {
+            Log::alert('User does not own event', [
+                'event' => $event,
+            ]);
+            return abort(403);
+        }
+
+        // Validate the input
+        try {
+            $input = $request->validate([
+                'bingo_board_ids' => 'required|exists:bingo_boards,id',
+                'name' => 'required|max:255|string',
+                'visibility' => 'required|in:public,private|string',
+            ]);
+
+            $boardsToAttach = [];
+            Log::alert('input', [
+                'input' => $input,
+            ]);
+            // For each bingo_board_id
+            foreach ($input['bingo_board_ids'] as $bingo_board_id) {
+                $bingoBoard = BingoBoard::find($bingo_board_id);
+                // If board is null, give 500
+                if ($bingoBoard == null) {
+                    abort(500);
+                }
+
+                // If board is not owned by the user, give 403
+                if ($bingoBoard->user_id != auth()->id()) {
+                    abort(403);
+                }
+
+                $boardsToAttach[] = $bingoBoard;
+            }
+
+            Log::alert('boardsToAttach', [
+                'boardsToAttach' => $boardsToAttach,
+            ]);
+
+            // Attach the bingo board to the event
+            foreach ($boardsToAttach as $board) {
+                if (!$event->bingoBoards->contains($board)) {
+                    $event->bingoBoards()->attach($board);
+                }
+            }
+
+            $event->name = $input['name'];
+            $event->visibility = $input['visibility'];
+            $event->save();
+
+            Log::alert('Event updated', [
+                'event' => $event,
+            ]);
+            // Redirect to the event page
+            return redirect()->route('events.show', $event)->with('success', 'Bingo board has been attached to the event!');
+        } catch (ValidationException $e) {
+            Log::error('Validation error', [
+                'exception' => $e,
+            ]);
+
+            return redirect()->back()->with('error', 'Validation error!');
+        }
     }
 
     /**
@@ -138,55 +202,5 @@ class EventController extends Controller
     public function attachBoard(Request $request, Event $event)
     {
 
-        // If user doesn't own the event return 403
-        if ($event->user_id != auth()->id()) {
-            return abort(403);
-        }
-        
-        // Validate the bingo_board_ids array
-        try {
-            $request->validate([
-                'bingo_board_id' => 'required|exists:bingo_boards,id',
-            ]);
-        } catch (ValidationException $e) {
-            Log::error('Validation error', [
-                'exception' => $e,
-            ]);
-        }
-
-        $boardsToAttach = [];
-        // For each bingo_board_id
-        foreach ($request->bingo_board_ids as $bingo_board_id) {
-            $bingoBoard = BingoBoard::find($bingo_board_id);
-            // If board is null, give 500
-            if ($bingoBoard == null) {
-                abort(500);
-            }
-
-            // If board is not owned by the user, give 403
-            if ($bingoBoard->user_id != auth()->id()) {
-                abort(403);
-            }
-
-            $boardsToAttach[] = $bingoBoard;
-        }
-        
-        // If the bingo board is already attached to the event, redirect back
-        if ($event->bingoBoards->contains($bingoBoard)) {
-            return redirect()->back()->with('error', 'Bingo board is already attached to the event!');
-        }
-
-        // Attach the bingo board to the event
-        foreach ($boardsToAttach as $board) {
-            $event->bingoBoards()->attach($board);
-        }
-
-        Log::alert('Bingo board attached to event', [
-            'event' => $event,
-            'bingoBoard' => $bingoBoard,
-        ]);
-
-        // Redirect to the event page
-        return redirect()->route('events.show', $event)->with('success', 'Bingo board has been attached to the event!');
     }
 }

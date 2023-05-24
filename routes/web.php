@@ -42,6 +42,8 @@ Route::prefix('dashboard')
             Route::post('/{event}/join', [EventController::class, 'join'])->name('events.join');
             Route::post('/{event}/leave', [EventController::class, 'leave'])->name('events.leave');
             Route::post('/{event}/boards', [EventController::class, 'attachBoard'])->name('events.boards.attach');
+            Route::get('/{event}/edit', [EventController::class, 'edit'])->name('events.edit');
+            Route::post('/{event}/update', [EventController::class, 'update'])->name('events.update');
         });
 
         // Bingo Boards
