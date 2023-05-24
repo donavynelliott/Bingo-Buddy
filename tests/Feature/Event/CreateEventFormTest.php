@@ -46,8 +46,6 @@ class CreateEventFormTest extends TestCase
 
         // Assert that all of the required fields are present
         $response->assertSee('Name');
-        $response->assertSee('Visibility');
-        $response->assertSee('Type');
     }
 
     /**
@@ -57,8 +55,6 @@ class CreateEventFormTest extends TestCase
     {
         $response = $this->post('/dashboard/events/store', [
             'name' => 'Test Event',
-            'visibility' => 'public',
-            'type' => 'bingo',
         ]);
 
         // Get the last event created by the user
@@ -68,8 +64,6 @@ class CreateEventFormTest extends TestCase
 
         $this->assertDatabaseHas('events', [
             'name' => 'Test Event',
-            'visibility' => 'public',
-            'type' => 'bingo',
             'user_id' => $this->user->id,
         ]);
     }
@@ -81,14 +75,10 @@ class CreateEventFormTest extends TestCase
     {
         $response = $this->post('/dashboard/events/store', [
             'name' => '',
-            'visibility' => '',
-            'type' => '',
         ]);
 
         $response->assertSessionHasErrors([
             'name' => 'The name field is required.',
-            'visibility' => 'The visibility field is required.',
-            'type' => 'The type field is required.',
         ]);
     }
 }

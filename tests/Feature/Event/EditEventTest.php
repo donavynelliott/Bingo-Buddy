@@ -20,8 +20,6 @@ class EditEventTest extends TestCase
         $user = User::factory()->create();
         $event = Event::factory()->create([
             'name' => 'Test Event',
-            'visibility' => 'public',
-            'type' => 'bingo',
             'user_id' => $user->id,
         ]);
         $this->actingAs($user);
@@ -31,9 +29,6 @@ class EditEventTest extends TestCase
         $response->assertStatus(200);
 
         $response->assertSee('Name');
-        $response->assertSee('Visibility');
-        $response->assertSee('Public');
-        $response->assertSee('Private');
     }
 
     /**
@@ -44,8 +39,6 @@ class EditEventTest extends TestCase
         $user = User::factory()->create();
         $event = Event::factory()->create([
             'name' => 'Test Event',
-            'visibility' => 'public',
-            'type' => 'bingo',
             'user_id' => $user->id,
         ]);
         $board1 = BingoBoard::factory()->create([
@@ -82,8 +75,6 @@ class EditEventTest extends TestCase
         $user = User::factory()->create();
         $event = Event::factory()->create([
             'name' => 'Test Event',
-            'visibility' => 'public',
-            'type' => 'bingo',
             'user_id' => $user->id,
         ]);
         $board1 = BingoBoard::factory()->create([

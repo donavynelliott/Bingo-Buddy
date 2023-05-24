@@ -10,13 +10,7 @@ class Event extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'visibility', 'type', 'user_id', 'start_date'];
-
-    protected $dates = ['start_date'];
-
-    protected $casts = [
-        'start_date' => 'datetime:Y-m-d',
-    ];
+    protected $fillable = ['name', 'user_id'];
 
     /**
      * The users that belong to the event.

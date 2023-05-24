@@ -10,6 +10,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UpdateEventTest extends TestCase
 {
+    use RefreshDatabase;
+
     protected $user;
 
     /**
@@ -31,8 +33,6 @@ class UpdateEventTest extends TestCase
         $event = Event::factory()->create([
             'user_id' => $this->user->id,
             'name' => 'Test Event',
-            'visibility' => 'public',
-            'type' => 'bingo',
         ]);
 
         $event->save();
@@ -49,7 +49,6 @@ class UpdateEventTest extends TestCase
         $response = $this->post('/dashboard/events/' . $event->id . '/update', [
             'bingo_board_ids' => [$bingoBoard->id],
             'name' => $event->name,
-            'visibility' => $event->visibility,
         ]);
 
         $response->assertStatus(302);
@@ -77,7 +76,6 @@ class UpdateEventTest extends TestCase
         $eventA = Event::factory()->create([
             'user_id' => $userA->id,
             'name' => 'eventA',
-            'visibility' => 'public',
         ]);
         $eventA->save();
 
@@ -92,7 +90,6 @@ class UpdateEventTest extends TestCase
         $eventB = Event::factory()->create([
             'user_id' => $userB->id,
             'name' => 'eventB',
-            'visibility' => 'public',
         ]);
         $eventB->save();
 
@@ -108,7 +105,6 @@ class UpdateEventTest extends TestCase
         $response = $this->post('/dashboard/events/' . $eventA->id . '/update', [
             'bingo_board_ids' => [$boardB->id],
             'name' => $eventA->name,
-            'visibility' => $eventA->visibility,
         ]);
         $response->assertStatus(403);
 
@@ -116,7 +112,6 @@ class UpdateEventTest extends TestCase
         $response = $this->post('/dashboard/events/' . $eventA->id . '/update', [
             'bingo_board_ids' => [$boardA->id],
             'name' => $eventA->name,
-            'visibility' => $eventA->visibility,
         ]);
         $response->assertStatus(302);
 
@@ -124,7 +119,6 @@ class UpdateEventTest extends TestCase
         $response = $this->post('/dashboard/events/' . $eventB->id . '/update', [
             'bingo_board_ids' => [$boardA->id],
             'name' => $eventB->name,
-            'visibility' => $eventB->visibility,
         ]);
         $response->assertStatus(403);
     }
@@ -137,8 +131,6 @@ class UpdateEventTest extends TestCase
         $event = Event::factory()->create([
             'user_id' => $this->user->id,
             'name' => 'Test Event',
-            'visibility' => 'public',
-            'type' => 'bingo',
         ]);
 
         $board = BingoBoard::factory()->create([
@@ -153,7 +145,6 @@ class UpdateEventTest extends TestCase
 
         $response = $this->post('/dashboard/events/' . $event->id . '/update', [
             'name' => 'Updated Event',
-            'visibility' => 'private',
             'bingo_board_ids' => [$board->id],
         ]);
 
@@ -166,7 +157,6 @@ class UpdateEventTest extends TestCase
         $this->assertDatabaseHas('events', [
             'id' => $event->id,
             'name' => 'Updated Event',
-            'visibility' => 'private',
         ]);
 
         $this->assertDatabaseHas('event_board', [

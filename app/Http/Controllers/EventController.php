@@ -32,17 +32,13 @@ class EventController extends Controller
     public function store(Request $request)
     {
         // Validate the request
-        $request->validate([
+        $input = $request->validate([
             'name' => 'required|max:255|string',
-            'visibility' => 'required|in:public,private|string',
-            'type' => 'required|in:bingo,raffle|string',
         ]);
 
         // Create the event
         $event = Event::create([
-            'name' => $request->name,
-            'visibility' => $request->visibility,
-            'type' => $request->type,
+            'name' => $input['name'],
             'user_id' => auth()->id(),
         ]);
 
@@ -90,7 +86,6 @@ class EventController extends Controller
             $input = $request->validate([
                 'bingo_board_ids' => 'required|exists:bingo_boards,id',
                 'name' => 'required|max:255|string',
-                'visibility' => 'required|in:public,private|string',
             ]);
 
             // For each bingo_board_id
@@ -117,7 +112,6 @@ class EventController extends Controller
             }
 
             $event->name = $input['name'];
-            $event->visibility = $input['visibility'];
             $event->save();
 
             // Redirect to the event page
@@ -180,13 +174,5 @@ class EventController extends Controller
 
         // Redirect to the event page
         return redirect()->route('events.show', $event)->with('success', 'You have left the event!');
-    }
-
-    /**
-     * Associate the specified bingo board with the event.
-     */
-    public function attachBoard(Request $request, Event $event)
-    {
-
     }
 }

@@ -33,9 +33,6 @@ class ShowEventTest extends TestCase
         $event = Event::factory()->create([
             'user_id' => $this->user->id,
             'name' => 'Test Event',
-            'visibility' => 'public',
-            'type' => 'bingo',
-            'start_date' => now()->addDays(7),
         ]);
 
         $response = $this->get('/dashboard/events/' . $event->id);
@@ -45,7 +42,6 @@ class ShowEventTest extends TestCase
         $response->assertSee($event->name);
         $response->assertSee(ucfirst($event->visibility));
         $response->assertSee(ucfirst($event->type));
-        $response->assertSee($event->start_date->format('F jS'));
         $response->assertSee($this->user->name);
     }
 
@@ -57,8 +53,6 @@ class ShowEventTest extends TestCase
         $event = Event::factory()->create([
             'user_id' => $this->user->id,
             'name' => 'Test Event',
-            'visibility' => 'public',
-            'type' => 'bingo',
         ]);
 
         $bingoBoard = BingoBoard::factory()->create([
@@ -87,8 +81,6 @@ class ShowEventTest extends TestCase
         $event = Event::factory()->create([
             'user_id' => $this->user->id,
             'name' => 'Test Event',
-            'visibility' => 'public',
-            'type' => 'bingo',
         ]);
 
         $response = $this->get('/dashboard/events/' . $event->id);

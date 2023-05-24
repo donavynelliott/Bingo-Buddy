@@ -19,9 +19,6 @@
                 <div class="p-6 text-gray-900">
                     <h1 class="text-3xl text-gray-900 font-bold mb-4">{{ $event->name }}</h1>
                     <p class="text-gray-700 text-sm mb-4">Created by {{ $event->user->name }} on {{ $event->created_at->format('F jS, Y') }}</p>
-                    <p class="text-gray-700 text-sm mb-4">Start Date: {{ $event->start_date->format('F jS, Y') }}</p>
-                    <p class="text-gray-700 text-sm mb-4">Visibility: {{ ucfirst($event->visibility) }}</p>
-                    <p class="text-gray-700 text-sm mb-4">Type: {{ ucfirst($event->type) }}</p>
                 </div>
                 
                 <!-- Edit button if owner -->

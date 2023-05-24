@@ -42,18 +42,13 @@ class EventTest extends TestCase
         $event = new Event();
         $event->name = "Test Event";
         $event->user_id = $this->user->id;
-        $event->visibility = "public";
-        $event->type = "bingo";
-        $event->start_date = now();
+
 
         $event->save();
 
         $this->assertDatabaseHas('events', [
             'name' => 'Test Event',
             'user_id' => $this->user->id,
-            'visibility' => 'public',
-            'type' => 'bingo',
-            'start_date' => now(),
         ]);
     }
 
@@ -65,8 +60,6 @@ class EventTest extends TestCase
         $event = Event::factory()->create([
             'user_id' => $this->user->id,
             'name' => 'Test Event',
-            'visibility' => 'public',
-            'type' => 'bingo',
         ]);
 
         // Attach a user to the event

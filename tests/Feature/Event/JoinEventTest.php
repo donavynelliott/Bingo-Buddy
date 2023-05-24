@@ -28,8 +28,6 @@ class JoinEventTest extends TestCase
         $this->event = Event::factory()->create([
             'user_id' => $this->user->id,
             'name' => 'Test Event',
-            'visibility' => 'public',
-            'type' => 'bingo',
         ]);
     }
 
