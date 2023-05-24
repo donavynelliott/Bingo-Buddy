@@ -24,6 +24,17 @@ class EventRules extends Model
         'public' => false,
     ];
 
+    protected $casts = [
+        'start_date' => 'datetime',
+        'end_date' => 'datetime',
+        'public' => 'boolean',
+    ];
+
+    protected $dates = [
+        'start_date',
+        'end_date',
+    ];
+
     public static function boot()
     {
         parent::boot();

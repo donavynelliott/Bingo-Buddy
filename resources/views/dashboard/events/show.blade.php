@@ -15,12 +15,25 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <!-- Event Details -->
-                <div class="p-6 text-gray-900">
-                    <h1 class="text-3xl text-gray-900 font-bold mb-4">{{ $event->name }}</h1>
-                    <p class="text-gray-700 text-sm mb-4">Created by {{ $event->user->name }} on {{ $event->created_at->format('F jS, Y') }}</p>
+                <!-- A grid that has 2 columns -->
+                <div class="grid grid-cols-2">
+                    <div class="p-6 text-gray-900">
+                        <h1 class="text-3xl text-gray-900 font-bold mb-4">{{ $event->name }}</h1>
+                        <p class="text-gray-700 text-sm mb-4">Created by {{ $event->user->name }} on {{ $event->created_at->format('F jS, Y') }}</p>
+                    </div>
+
+                    <div class="p-6 text-gray-900">
+                        <h2 class="text-2xl text-gray-900 font-bold mb-4">Event Rules</h2>
+                        <p class="text-gray-700 text-sm mb-4">Start Date: {{ $event->rules->start_date->format('F jS, Y') }}</p>
+                        <p class="text-gray-700 text-sm mb-4">End Date: {{ $event->rules->end_date->format('F jS, Y') }}</p>
+                        <p class="text-gray-700 text-sm mb-4">End Condition: {{ $event->rules->end_condition ? "End Date" : "Board Completion" }}</p>
+                        <p class="text-gray-700 text-sm mb-4">Max Users: {{ $event->rules->max_users }}</p>
+                        <p class="text-gray-700 text-sm mb-4">Type: {{ $event->rules->public ? "Public" : "Private" }}</p>
+                    </div>
                 </div>
-                
+                <!-- Event Details -->
+
+
                 <!-- Edit button if owner -->
                 @if ($event->user_id == auth()->id())
                 <div class="p-6 text-gray-900">

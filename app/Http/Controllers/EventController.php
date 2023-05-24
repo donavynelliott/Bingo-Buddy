@@ -57,8 +57,9 @@ class EventController extends Controller
         }
 
         $bingoBoards = $event->bingoBoards()->get();
+        $eventRules = $event->rules();
 
-        return view('dashboard.events.show', compact('event', 'bingoBoards'));
+        return view('dashboard.events.show', compact('event', 'bingoBoards', 'eventRules'));
     }
 
     /**
