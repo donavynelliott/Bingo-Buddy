@@ -44,6 +44,7 @@ class EventTest extends TestCase
         $event->user_id = $this->user->id;
         $event->visibility = "public";
         $event->type = "bingo";
+        $event->start_date = now();
 
         $event->save();
 
@@ -52,6 +53,7 @@ class EventTest extends TestCase
             'user_id' => $this->user->id,
             'visibility' => 'public',
             'type' => 'bingo',
+            'start_date' => now(),
         ]);
     }
 

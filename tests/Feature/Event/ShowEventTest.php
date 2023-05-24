@@ -35,6 +35,7 @@ class ShowEventTest extends TestCase
             'name' => 'Test Event',
             'visibility' => 'public',
             'type' => 'bingo',
+            'start_date' => now()->addDays(7),
         ]);
 
         $response = $this->get('/dashboard/events/' . $event->id);
@@ -44,6 +45,8 @@ class ShowEventTest extends TestCase
         $response->assertSee($event->name);
         $response->assertSee(ucfirst($event->visibility));
         $response->assertSee(ucfirst($event->type));
+        $response->assertSee($event->start_date->format('F jS'));
+        $response->assertSee($this->user->name);
     }
 
     /**
@@ -80,7 +83,7 @@ class ShowEventTest extends TestCase
     public function test_event_owner_can_see_edit_button(): void
     {
         $this->actingAs($this->user);
-        
+
         $event = Event::factory()->create([
             'user_id' => $this->user->id,
             'name' => 'Test Event',
