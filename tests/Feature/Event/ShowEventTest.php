@@ -73,4 +73,25 @@ class ShowEventTest extends TestCase
 
         $response->assertSee('Test Bingo Board');
     }
+    
+    /**
+     * Test event owner can see edit button
+     */
+    public function test_event_owner_can_see_edit_button(): void
+    {
+        $this->actingAs($this->user);
+        
+        $event = Event::factory()->create([
+            'user_id' => $this->user->id,
+            'name' => 'Test Event',
+            'visibility' => 'public',
+            'type' => 'bingo',
+        ]);
+
+        $response = $this->get('/dashboard/events/' . $event->id);
+
+        $response->assertStatus(200);
+
+        $response->assertSee('Edit');
+    }
 }

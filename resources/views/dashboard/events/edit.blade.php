@@ -17,6 +17,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <!-- Event Details Form -->
                 <form method="POST" action="{{ route('events.update', ['event' => $event]) }}">
+                    @csrf
                     <!-- Name field -->
                     <div class="p-6 text-gray-900">
                         <x-input-label for="name" :value="__('Name')" />
@@ -33,7 +34,7 @@
                     <!-- Display checkbox for all boards owned by user -->
                     <div class="p-6 text-gray-900">
                         @foreach ($boards as $board)
-                        <input type="checkbox" name="boards[]" value="{{ $board->id }}" @if ($event->bingoBoards->contains($board)) checked @endif>
+                        <input type="checkbox" name="bingo_board_ids[]" value="{{ $board->id }}" @if ($event->bingoBoards->contains($board)) checked @endif>
                         <label for="boards">{{ $board->name }}</label><br>
                         @endforeach
                     </div>

@@ -82,9 +82,6 @@ class EventController extends Controller
 
         // If user doesn't own the event return 403
         if ($event->user_id != auth()->id()) {
-            Log::alert('User does not own event', [
-                'event' => $event,
-            ]);
             return abort(403);
         }
 
@@ -96,10 +93,6 @@ class EventController extends Controller
                 'visibility' => 'required|in:public,private|string',
             ]);
 
-            $boardsToAttach = [];
-            Log::alert('input', [
-                'input' => $input,
-            ]);
             // For each bingo_board_id
             foreach ($input['bingo_board_ids'] as $bingo_board_id) {
                 $bingoBoard = BingoBoard::find($bingo_board_id);
@@ -116,10 +109,6 @@ class EventController extends Controller
                 $boardsToAttach[] = $bingoBoard;
             }
 
-            Log::alert('boardsToAttach', [
-                'boardsToAttach' => $boardsToAttach,
-            ]);
-
             // Attach the bingo board to the event
             foreach ($boardsToAttach as $board) {
                 if (!$event->bingoBoards->contains($board)) {
@@ -131,9 +120,6 @@ class EventController extends Controller
             $event->visibility = $input['visibility'];
             $event->save();
 
-            Log::alert('Event updated', [
-                'event' => $event,
-            ]);
             // Redirect to the event page
             return redirect()->route('events.show', $event)->with('success', 'Bingo board has been attached to the event!');
         } catch (ValidationException $e) {
