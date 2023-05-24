@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\BingoBoardController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EventRulesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -53,6 +54,11 @@ Route::prefix('dashboard')
             Route::get('/{bingoBoard}', [BingoBoardController::class, 'show'])->name('boards.show');
             Route::post('/update/{bingoBoard}', [BingoBoardController::class, 'update'])->name('boards.update');
             Route::get('/edit/{bingoBoard}', [BingoBoardController::class, 'edit'])->name('boards.edit');
+        });
+
+        // Event Rules
+        Route::prefix('event-rules')->group(function() {
+            Route::get('/edit/{event}', [EventRulesController::class, 'edit'])->name('event-rules.edit');
         });
 });
 

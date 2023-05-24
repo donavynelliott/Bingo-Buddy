@@ -20,6 +20,13 @@
                     <div class="p-6 text-gray-900">
                         <h1 class="text-3xl text-gray-900 font-bold mb-4">{{ $event->name }}</h1>
                         <p class="text-gray-700 text-sm mb-4">Created by {{ $event->user->name }} on {{ $event->created_at->format('F jS, Y') }}</p>
+
+                        <!-- Edit button if owner -->
+                        @if ($event->user_id == auth()->id())
+                        <div class="p-6 text-gray-900">
+                            <a href="{{ route('events.edit', ['event' => $event]) }}" class="bg-blue-500 text-white px-4 py-3 rounded font-medium w-full">Edit Event</a>
+                        </div>
+                        @endif
                     </div>
 
                     <div class="p-6 text-gray-900">
@@ -29,17 +36,15 @@
                         <p class="text-gray-700 text-sm mb-4">End Condition: {{ $event->rules->end_condition ? "End Date" : "Board Completion" }}</p>
                         <p class="text-gray-700 text-sm mb-4">Max Users: {{ $event->rules->max_users }}</p>
                         <p class="text-gray-700 text-sm mb-4">Type: {{ $event->rules->public ? "Public" : "Private" }}</p>
+
+                        <!-- Edit button if owner -->
+                        @if ($event->user_id == auth()->id())
+                        <div class="p-6 text-gray-900">
+                            <a href="{{ route('event-rules.edit', ['event' => $event]) }}" class="bg-blue-500 text-white px-4 py-3 rounded font-medium w-full">Edit Rules</a>
+                        </div>
+                        @endif
                     </div>
                 </div>
-                <!-- Event Details -->
-
-
-                <!-- Edit button if owner -->
-                @if ($event->user_id == auth()->id())
-                <div class="p-6 text-gray-900">
-                    <a href="{{ route('events.edit', ['event' => $event]) }}" class="bg-blue-500 text-white px-4 py-3 rounded font-medium w-full">Edit Event</a>
-                </div>
-                @endif
 
                 <!-- Related Bingo Boards -->
                 <div class="p-6 text-gray-900">

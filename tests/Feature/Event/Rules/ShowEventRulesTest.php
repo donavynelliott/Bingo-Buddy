@@ -45,4 +45,18 @@ class ShowEventRulesTest extends TestCase
         $response->assertSee($eventRules->public ? "Public" : "Private");
     }
 
+    /**
+     * Test the edit event rules button is visible when viewing the event
+     */
+    public function test_edit_event_rules_button_is_visible_when_viewing_event()
+    {
+        $this->actingAs($this->user);
+        $event = Event::factory()->create([
+            'name' => 'Test Event',
+            'user_id' => $this->user->id,
+        ]);
+
+        $response = $this->get(route('events.show', $event));
+        $response->assertSee(route('event-rules.edit', $event));
+    }
 }
