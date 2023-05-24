@@ -37,4 +37,22 @@ class Event extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Get the EventRules record associated with the event.
+     */
+    public function rules()
+    {
+        $eventRules = $this->hasOne(EventRules::class);
+
+        if (!$eventRules->exists())
+        {
+            $eventRules = new EventRules([
+                'event_id' => $this->id,
+            ]);
+            $eventRules->save();
+        }
+
+        return $eventRules;
+    }
 }
