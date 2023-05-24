@@ -58,8 +58,8 @@ class EventRulesTest extends TestCase
         $this->assertDatabaseHas('event_rules', [
             'event_id' => $event->id,
             // Date formatted as YYYY-MM-DD
-            'start_date' => date('Y-m-d', strtotime(now()->addDays(7))),
-            'end_date' => date('Y-m-d', strtotime(now()->addDays(38))),
+            'start_date' => date('Y-m-d H:i', strtotime(now()->addDays(7))),
+            'end_date' => date('Y-m-d H:i', strtotime(now()->addDays(38))),
             'end_condition' => 'end_date',
             'max_users' => 10,
             'public' => 1,
@@ -93,8 +93,8 @@ class EventRulesTest extends TestCase
 
         $this->assertDatabaseHas('event_rules', [
             'event_id' => $event->id,
-            'start_date' => date('Y-m-d', strtotime(now()->addDays(7))),
-            'end_date' => date('Y-m-d', strtotime(now()->addDays(38))),
+            'start_date' => date('Y-m-d H:i', strtotime(now()->addDays(7))),
+            'end_date' => date('Y-m-d H:i', strtotime(now()->addDays(38))),
             'end_condition' => 'end_date',
             'max_users' => 10,
             'public' => 0,

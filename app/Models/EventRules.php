@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class EventRules extends Model
 {
@@ -25,8 +26,8 @@ class EventRules extends Model
     ];
 
     protected $casts = [
-        'start_date' => 'datetime',
-        'end_date' => 'datetime',
+        'start_date' => 'datetime:Y-m-d H:i:s',
+        'end_date' => 'datetime:Y-m-d H:i:s',
         'public' => 'boolean',
     ];
 
@@ -35,13 +36,22 @@ class EventRules extends Model
         'end_date',
     ];
 
+    protected $dateFormat = 'Y-m-d H:i:s';
+
     public static function boot()
     {
         parent::boot();
+        
+        $startDate = now()->addDays(7)->toDateTimeString();
+        $endDate = now()->addDays(38)->toDateTimeString();
 
-        static::creating(function ($eventRules) {
-            $eventRules->start_date = now()->addDays(7);
-            $eventRules->end_date = now()->addDays(38);
+        // Round each down to the 0th second
+        $startDate = substr($startDate, 0, 17) . '00';
+        $endDate = substr($endDate, 0, 17) . '00';
+
+        static::creating(function ($eventRules) use ($startDate, $endDate) {
+            $eventRules->start_date = $startDate;
+            $eventRules->end_date = $endDate;
         });
     }
 }

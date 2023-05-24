@@ -59,6 +59,7 @@ Route::prefix('dashboard')
         // Event Rules
         Route::prefix('event-rules')->group(function() {
             Route::get('/edit/{event}', [EventRulesController::class, 'edit'])->name('event-rules.edit');
+            Route::post('/update/{event}', [EventRulesController::class, 'update'])->name('event-rules.update');
         });
 });
 
