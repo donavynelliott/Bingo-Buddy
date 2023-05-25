@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Enums\EventStatus;
 use App\Models\Event;
 use App\Models\User;
 use Tests\TestCase;
@@ -42,6 +43,7 @@ class EventTest extends TestCase
         $event = new Event();
         $event->name = "Test Event";
         $event->user_id = $this->user->id;
+        $event->status = EventStatus::NotStarted;
 
 
         $event->save();
@@ -49,6 +51,7 @@ class EventTest extends TestCase
         $this->assertDatabaseHas('events', [
             'name' => 'Test Event',
             'user_id' => $this->user->id,
+            'status' => EventStatus::NotStarted,
         ]);
     }
 
@@ -72,5 +75,18 @@ class EventTest extends TestCase
         ]);
 
         $this->assertTrue($event->users->contains($this->user));
+    }
+
+    /**
+     * Test that an event has a default status of NotStarted
+     */
+    public function test_event_model_has_default_status_of_not_started(): void
+    {
+        $event = Event::factory()->create([
+            'user_id' => $this->user->id,
+            'name' => 'Test Event',
+        ]);
+
+        $this->assertEquals(EventStatus::NotStarted, $event->status);
     }
 }
