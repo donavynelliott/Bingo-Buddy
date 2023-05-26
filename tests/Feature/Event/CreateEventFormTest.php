@@ -54,16 +54,17 @@ class CreateEventFormTest extends TestCase
     public function test_form_can_be_submitted_successfully(): void
     {
         $response = $this->post('/dashboard/events/store', [
-            'name' => 'Test Event',
+            'name' => 'TestEventFormCanBeSubmittedSuccessfully',
         ]);
 
-        // Get the last event created by the user
-        $event = Event::latest()->first();
+        $eventId = Event::where('name', 'TestEventFormCanBeSubmittedSuccessfully')->first()->id;
 
-        $response->assertRedirect('/dashboard/events/' . $event->id);
+        // Wildcard redirect
+        $response->assertRedirect('/dashboard/events/' . $eventId);
+        
 
         $this->assertDatabaseHas('events', [
-            'name' => 'Test Event',
+            'name' => 'TestEventFormCanBeSubmittedSuccessfully',
             'user_id' => $this->user->id,
         ]);
     }
