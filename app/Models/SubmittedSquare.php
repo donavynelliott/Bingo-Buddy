@@ -15,4 +15,20 @@ class SubmittedSquare extends Model
         'user_id',
         'approved'
     ];
+
+    /**
+     * Get the board that owns the square.
+     */
+    public function bingoBoard()
+    {
+        return $this->belongsTo(BingoBoard::class);
+    }
+
+    /**
+     * Get the BingoSquare that owns the SubmittedSquare.
+     */
+    public function bingoSquare()
+    {
+        return $this->belongsTo(BingoSquare::class);
+    }
 }

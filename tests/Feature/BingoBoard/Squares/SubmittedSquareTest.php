@@ -74,4 +74,36 @@ class SubmittedSquareTest extends TestCase
         $this->assertEquals($this->user->id, $submittedSquare->user_id);
         $this->assertEquals(true, $submittedSquare->approved);
     }
+
+    /**
+     * Test that we can retrieve the BingoBoard the SubmittedSquare belongs to.
+     */
+    public function test_submitted_square_belongs_to_bingo_board(): void
+    {
+        $submittedSquare = SubmittedSquare::factory()->create(
+            [
+                'bingo_board_id' => $this->board->id,
+                'bingo_square_id' => $this->square->id,
+                'user_id' => $this->user->id,
+            ]
+        );
+
+        $this->assertNotNull($submittedSquare->bingoBoard);
+    }
+
+    /**
+     * Test that we can retrieve the BingoSquare the SubmittedSquare belongs to.
+     */
+    public function test_submitted_square_belongs_to_bingo_square(): void
+    {
+        $submittedSquare = SubmittedSquare::factory()->create(
+            [
+                'bingo_board_id' => $this->board->id,
+                'bingo_square_id' => $this->square->id,
+                'user_id' => $this->user->id,
+            ]
+        );
+
+        $this->assertNotNull($submittedSquare->bingoSquare);
+    }
 }

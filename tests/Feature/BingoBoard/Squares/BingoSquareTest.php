@@ -68,4 +68,12 @@ class BingoSquareTest extends TestCase
         $this->assertEquals('Test Content', $square->content);
         $this->assertEquals(1, $square->position);
     }
+
+    /**
+     * Test we can retrieve the board a BingoSquare belongs to.
+     */
+    public function test_we_can_retrieve_the_board_a_bingo_square_belongs_to(): void
+    {
+        $this->assertNotNull($this->square->bingoBoard);
+    }
 }

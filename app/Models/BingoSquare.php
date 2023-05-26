@@ -15,4 +15,12 @@ class BingoSquare extends Model
         'content',
         'position',
     ];
+
+    /**
+     * Get the board that owns the square.
+     */
+    public function bingoBoard()
+    {
+        return $this->belongsTo(BingoBoard::class);
+    }
 }
