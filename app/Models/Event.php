@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\EventStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -10,7 +11,11 @@ class Event extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'user_id'];
+    protected $fillable = ['name', 'user_id', 'status'];
+
+    protected $casts = [
+        'status' => EventStatus::class
+    ];
 
     /**
      * The users that belong to the event.

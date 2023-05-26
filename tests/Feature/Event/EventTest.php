@@ -4,9 +4,11 @@ namespace Tests\Unit;
 
 use App\Enums\EventStatus;
 use App\Models\Event;
+use App\Models\EventRules;
 use App\Models\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Log;
 
 class EventTest extends TestCase
 {
@@ -43,7 +45,7 @@ class EventTest extends TestCase
         $event = new Event();
         $event->name = "Test Event";
         $event->user_id = $this->user->id;
-        $event->status = EventStatus::NotStarted;
+        $event->status = EventStatus::Ended;
 
 
         $event->save();
@@ -51,7 +53,7 @@ class EventTest extends TestCase
         $this->assertDatabaseHas('events', [
             'name' => 'Test Event',
             'user_id' => $this->user->id,
-            'status' => EventStatus::NotStarted,
+            'status' => EventStatus::Ended,
         ]);
     }
 
@@ -88,5 +90,33 @@ class EventTest extends TestCase
         ]);
 
         $this->assertEquals(EventStatus::NotStarted, $event->status);
+    }
+
+    /**
+     * Test than event changes its status to InProgress when the start datetime is reached
+     */
+    public function test_event_changes_status_to_in_progress_when_start_datetime_is_reached(): void
+    {
+        $event = Event::factory()->create([
+            'user_id' => $this->user->id,
+            'name' => 'Test Event',
+            'status' => EventStatus::NotStarted,
+        ]);
+
+        $eventRules = $event->rules();
+        $eventRules->start_date = now()->subDay();
+
+        $event->save();
+        $eventRules->save();
+
+        $this->assertEquals(EventStatus::NotStarted, $event->status->value);
+
+        // Run UpdateEventsStatuses job
+        $this->artisan('app:update-event-statuses')
+            ->expectsOutput('1 events updated to in progress');
+        $this->assertDatabaseHas('events', [
+            'id' => $event->id,
+            'status' => EventStatus::InProgress,
+        ]);  
     }
 }

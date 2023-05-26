@@ -11,9 +11,24 @@ use BenSampo\Enum\Enum;
  */
 final class EventStatus extends Enum
 {
+    /**
+     * @enum(description="Event has not started")
+     */
     const NotStarted =   0;
+    /**
+     * @enum(description="Event is in progress")
+     */
     const InProgress =   1;
+    /**
+     * @enum(description="Event has reached an automated end")
+     */
     const Closed =       2;
+    /**
+     * @enum(description="Event has been manually ended by an event administrator")
+     */
     const Ended =        3;
+    /**
+     * @enum(description="Event has been archived")
+     */
     const Archived =     4;
 }
