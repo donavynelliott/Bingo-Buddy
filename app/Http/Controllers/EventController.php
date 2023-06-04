@@ -176,4 +176,17 @@ class EventController extends Controller
         // Redirect to the event page
         return redirect()->route('events.show', $event)->with('success', 'You have left the event!');
     }
+
+    /**
+     * Get the event's users
+     */
+    public function members(Event $event)
+    {
+        // Get the event's users
+        $users = $event->users()->get();
+
+        // Return the users
+        return view('dashboard.events.members', compact('users', 'event'));
+    }
+
 }

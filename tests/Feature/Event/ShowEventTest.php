@@ -89,4 +89,58 @@ class ShowEventTest extends TestCase
 
         $response->assertSee('Edit');
     }
+
+    /**
+     * Test we can see users that have joined the event
+     */
+    public function test_can_see_users_that_have_joined_the_event(): void
+    {
+        $event = Event::factory()->create([
+            'user_id' => $this->user->id,
+            'name' => 'Test Event',
+        ]);
+
+        $user = User::factory()->create([
+            'name' => 'Test Player',
+        ]);
+
+        $event->users()->attach($user);
+
+        $response = $this->get('/dashboard/events/' . $event->id);
+
+        $response->assertStatus(200);
+
+        $response->assertSee('Test Player');
+    }
+
+    /**
+     * Test we can see route to view entire member list
+     */
+    public function test_can_see_route_to_view_entire_member_list(): void
+    {
+        $event = Event::factory()->create([
+            'user_id' => $this->user->id,
+            'name' => 'Test Event',
+        ]);
+
+        // Create 11 users
+        $users = User::factory()->count(11)->create();
+
+        // Attach 11 users to event
+        $event->users()->attach($users);
+
+        $response = $this->get('/dashboard/events/' . $event->id);
+
+        $response->assertStatus(200);
+
+        $response->assertSee('And 1 more...');
+
+        $response->assertDontSee($users[10]->name);
+
+        $response = $this->get('/dashboard/events/' . $event->id . '/members');
+
+        $response->assertStatus(200);
+
+        $response->assertSee($users[10]->name);
+    }
 }
