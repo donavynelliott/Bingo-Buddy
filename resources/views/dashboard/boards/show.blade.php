@@ -29,15 +29,21 @@
 
                     <!-- Create a set of square input boxes based on the size -->
                     <div class="grid grid-cols-{{ $bingoBoard->size }} divide-x divide-y border border-black h-full">
-                        @foreach ($bingoBoard->getBoardData() as $rowKey => $row)
-                        @foreach ($row as $colKey => $col)
-                        <div class="bg-white overflow-hidden border-slate-200 aspect-square flex justify-center items-center">
-                            <div class="text-gray-900 text-center">
-                                {{ $col }}
+                        @php
+                            $squares = $bingoBoard->bingoSquares()->get();
+                        @endphp
+                        @for ($i = 0; $i < pow($bingoBoard->size, 2); $i++)
+                            <div class="bg-white overflow-hidden border-slate-200 aspect-square flex justify-center items-center">
+                                <div class="text-gray-900 text-center">
+                                    
+                                    @if (isset($squares[$i]))
+                                        {{ $squares[$i]->title }}
+                                    @else
+                                        <span class="text-gray-400">Empty</span>
+                                    @endif
+                                </div>
                             </div>
-                        </div>
-                        @endforeach
-                        @endforeach
+                        @endfor
                     </div>
 
 

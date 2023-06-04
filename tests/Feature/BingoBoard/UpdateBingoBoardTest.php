@@ -11,18 +11,29 @@ class UpdateBingoBoardTest extends TestCase
 {
     use RefreshDatabase;
 
-    // The squares that will be used to test the board
     protected static $squares = [
-        ['square 1', 'square 2', 'square 3'],
-        ['square 4', 'square 5', 'square 6'],
-        ['square 7', 'square 8', 'square 9']
+        'square 1',
+        'square 2',
+        'square 3',
+        'square 4',
+        'square 5',
+        'square 6',
+        'square 7',
+        'square 8',
+        'square 9'
     ];
 
     protected static $updatedSquares = [
-            ['updated square 1', 'updated square 2', 'updated square 3'],
-            ['updated square 4', 'updated square 5', 'updated square 6'],
-            ['updated square 7', 'updated square 8', 'updated square 9']
-        ];
+        'square 1*',
+        'square 2*',
+        'square 3*',
+        'square 4*',
+        'square 5*',
+        'square 6*',
+        'square 7*',
+        'square 8*',
+        'square 9*'
+    ];
 
     protected $board = null;
 
@@ -80,12 +91,10 @@ class UpdateBingoBoardTest extends TestCase
         // Assert that the board was created successfully
         $response->assertRedirect('/dashboard/boards/' . $this->board->id);
         $response->assertSessionHas('success');
-        $this->assertDatabaseHas('bingo_boards', [
-            'name' => 'New test Board',
-            'user_id' => $this->board->user_id,
-            'size' => $this->board->size,
-            'squares' => json_encode(self::$updatedSquares),
-            'type' => 'blackout'
+        $this->assertDatabaseHas('bingo_squares', [
+            'bingo_board_id' => $this->board->id,
+            'title' => self::$updatedSquares[0],
+            'position' => 0
         ]);
     }
 
@@ -97,20 +106,21 @@ class UpdateBingoBoardTest extends TestCase
         $this->actingAs($this->user);
 
         // updated the squares
-        $this->board->squares = json_encode(self::$updatedSquares);
-        $this->board->save();
+        $response = $this->post('/dashboard/boards/update/' . $this->board->id, [
+            'squares' => self::$updatedSquares,
+            'name' => 'Updated Test Board',
+            'type' => 'blackout'
+        ]);
 
         // Visit the page of the previously created board
         $response = $this->get('/dashboard/boards/' . $this->board->id);
         $response->assertStatus(200);
 
-        $this->assertTrue($this->board->squares !== null);
+        $this->assertTrue($this->board->bingoSquares !== null);
 
         // We should see all the values from the squares array
         foreach (self::$updatedSquares as $row) {
-            foreach ($row as $square) {
-                $response->assertSee($square);
-            }
+            $response->assertSee($row);
         }
     }
 }

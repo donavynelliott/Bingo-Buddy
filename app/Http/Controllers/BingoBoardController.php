@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BingoBoard;
+use App\Models\BingoSquare;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -86,14 +87,12 @@ class BingoBoardController extends Controller
             'squares' => [
                 'required',
                 'array',
-                'size:' . $bingoBoard->size,
-                'each' => function ($attribute, $value) use ($bingoBoard) {
-                    // Validation 2. Ensure there is the correct amount of cells and that each cell in the json object is a string  
-                    return Validator::make($value, [
+                'size:' . pow($bingoBoard->size, 2),
+                'each' => function ($attr, $val) use ($bingoBoard) {
+                    return Validator::make($val, [
                         'required',
-                        'array',
-                        'size:' . $bingoBoard->size,
-                        'each' => 'string|max:255'
+                        'string',
+                        'max:255',
                     ]);
                 }
             ],
@@ -108,14 +107,35 @@ class BingoBoardController extends Controller
             return redirect()->route('boards.edit', $bingoBoard)->withErrors($validator->errors());
         }
 
-        // Update the board
-        $bingoBoard->squares = json_encode($request->squares);
-        $bingoBoard->name = $request->name;
-        $bingoBoard->type = $request->type;
-        $bingoBoard->save();
+        $validated = $validator->validated();
 
-        // Log the board was saved successfully
-        Log::info('Bingo board ' . $bingoBoard->id . ' was updated successfully');
+        $currentSquares = $bingoBoard->bingoSquares()->get();
+
+        // Update the board
+        $squares = $validated['squares'];
+        foreach ($squares as $position => $square) {
+            // If a square with the same position already exists, simply update the title
+            if (isset($currentSquares[$position])) {
+                if ($currentSquares[$position]->title !== $square)
+                {
+                    $currentSquares[$position]->title = $square;
+                    $currentSquares[$position]->save();
+                }
+                continue;
+            } else if ($square !== null) {
+                // otherwise, create a new BingoSquare object
+                $bingoSquare = new BingoSquare([
+                    'title' => $square,
+                    'position' => $position,
+                    'bingo_board_id' => $bingoBoard->id
+                ]);
+                $bingoSquare->save();
+            }
+        }
+
+        $bingoBoard->name = $validated['name'];
+        $bingoBoard->type = $validated['type'];
+        $bingoBoard->save();
 
         // Redirect to the board page
         return redirect()->route('boards.show', $bingoBoard)->with('success', 'Bingo board updated successfully!');

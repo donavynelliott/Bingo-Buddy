@@ -10,41 +10,13 @@ class BingoBoard extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'size', 'squares', 'user_id', 'type'];
-
-    protected $casts = [
-        'squares' => 'array',
-    ];
+    protected $fillable = ['name', 'size', 'user_id', 'type'];
     
     /**
-     * Get the data structure for the board. Return a new empty board if the current one is empty
-     * 
-     * @return array
+     * Get all the BingoSquares for the board.
      */
-    public function getBoardData(): array
+    public function bingoSquares()
     {
-        if ($this->squares === null) {
-            return self::getEmptyBoard($this->size);
-        } else {
-            return json_decode($this->squares);
-        }
-    }
-
-    /**
-     * Get a empty board data structure
-     */
-    public static function getEmptyBoard(int $size): array
-    {
-        $board = [];
-
-        for ($i = 0; $i < $size; $i++) {
-            $board[$i] = [];
-
-            for ($j = 0; $j < $size; $j++) {
-                $board[$i][$j] = '';
-            }
-        }
-
-        return $board;
+        return $this->hasMany(BingoSquare::class);
     }
 }

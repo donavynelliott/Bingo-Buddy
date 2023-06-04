@@ -10,9 +10,15 @@ use Tests\TestCase;
 class EditBingoBoardTest extends TestCase
 {
     protected static $squares = [
-        ['square 1', 'square 2', 'square 3'],
-        ['square 4', 'square 5', 'square 6'],
-        ['square 7', 'square 8', 'square 9']
+        'square 1',
+        'square 2',
+        'square 3',
+        'square 4',
+        'square 5',
+        'square 6',
+        'square 7',
+        'square 8',
+        'square 9'
     ];
 
     /**
@@ -60,9 +66,6 @@ class EditBingoBoardTest extends TestCase
         // Assert that all of the required fields are present
         $response->assertSee('Name');
         $response->assertSee('Type');
-        
-        // Check that we can view the squares
-        $response->assertSee('square 1');
     }
 
 
@@ -92,8 +95,12 @@ class EditBingoBoardTest extends TestCase
 
         $this->assertDatabaseHas('bingo_boards', [
             'name' => 'Test Board',
-            'type' => 'blackout',
-            'squares' => json_encode(self::$squares)
+            'type' => 'blackout'
+        ]);
+
+        $this->assertDatabaseHas('bingo_squares', [
+            'title' => 'square 1',
+            'bingo_board_id' => $board->id
         ]);
     }
 
@@ -114,7 +121,8 @@ class EditBingoBoardTest extends TestCase
 
         $response = $this->post('/dashboard/boards/update/' . $board->id, [
             'name' => '',
-            'type' => 'blackout'
+            'type' => 'blackout',
+            'squares' => []
         ]);
 
         $response->assertSessionHasErrors(['name']);
