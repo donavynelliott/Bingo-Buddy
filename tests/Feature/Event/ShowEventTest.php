@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Dashboard;
 
+use App\Enums\EventStatus;
 use App\Models\BingoBoard;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -142,5 +143,28 @@ class ShowEventTest extends TestCase
         $response->assertStatus(200);
 
         $response->assertSee($users[10]->name);
+    }
+
+    /**
+     * Test we can see the status of the event
+     */
+    public function test_can_see_the_status_of_the_event(): void
+    {
+        $event = Event::factory()->create([
+            'user_id' => $this->user->id,
+            'name' => 'Test Event',
+        ]);
+
+        $response = $this->get('/dashboard/events/' . $event->id);
+
+        $response->assertSee('Status');
+        $response->assertSee('Not Started');
+
+        $event->status = EventStatus::InProgress;
+        $event->save();
+
+        $response = $this->get('/dashboard/events/' . $event->id);
+
+        $response->assertSee('In Progress');
     }
 }
