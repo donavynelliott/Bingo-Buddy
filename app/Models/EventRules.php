@@ -17,18 +17,21 @@ class EventRules extends Model
         'end_condition',
         'max_users',
         'public',
+        'teams',
     ];
 
     protected $attributes = [
         'end_condition' => 'end_date',
         'max_users' => 10,
         'public' => false,
+        'teams' => false,
     ];
 
     protected $casts = [
         'start_date' => 'datetime:Y-m-d H:i:s',
         'end_date' => 'datetime:Y-m-d H:i:s',
         'public' => 'boolean',
+        'teams' => 'boolean',
     ];
 
     protected $dates = [

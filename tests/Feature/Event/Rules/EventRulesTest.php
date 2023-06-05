@@ -52,6 +52,7 @@ class EventRulesTest extends TestCase
         $eventRules->end_condition = 'end_date';
         $eventRules->max_users = 10;
         $eventRules->public = true;
+        $eventRules->teams = true;
 
         $eventRules->save();
 
@@ -63,6 +64,7 @@ class EventRulesTest extends TestCase
             'end_condition' => 'end_date',
             'max_users' => 10,
             'public' => 1,
+            'teams' => 1,
         ]);
     }
 

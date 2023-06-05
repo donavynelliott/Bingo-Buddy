@@ -36,6 +36,7 @@
                         <p class="text-gray-700 text-sm mb-4">End Condition: {{ $event->rules->end_condition ? "End Date" : "Board Completion" }}</p>
                         <p class="text-gray-700 text-sm mb-4">Max Users: {{ $event->rules->max_users }}</p>
                         <p class="text-gray-700 text-sm mb-4">Type: {{ $event->rules->public ? "Public" : "Private" }}</p>
+                        <p class="text-gray-700 text-sm mb-4">Teams: {{ $event->rules->teams ? "Teams" : "Individuals" }}</p>
 
                         <!-- Edit button if owner -->
                         @if ($event->user_id == auth()->id())

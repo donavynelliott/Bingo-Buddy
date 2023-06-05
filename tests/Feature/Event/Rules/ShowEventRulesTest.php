@@ -43,6 +43,7 @@ class ShowEventRulesTest extends TestCase
         $response->assertSee($eventRules->end_condition === 'end_date' ? "End Date" : "Board Completion");
         $response->assertSee($eventRules->max_users);
         $response->assertSee($eventRules->public ? "Public" : "Private");
+        $response->assertSee($eventRules->teams ? "Teams" : "Individuals");
     }
 
     /**

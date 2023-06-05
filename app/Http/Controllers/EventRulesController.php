@@ -45,6 +45,7 @@ class EventRulesController extends Controller
                 'end_condition' => 'required|in:end_date,all_boards_completed',
                 'max_users' => 'required|integer|max:1000',
                 'public' => 'required|boolean',
+                'teams' => 'required|boolean',
             ]);
 
             $eventRules = $event->rules();

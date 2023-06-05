@@ -62,6 +62,7 @@ class EditEventRulesTest extends TestCase
         $response->assertSee("Start Date");
         $response->assertSee("End Date");
         $response->assertSee("Max Users");
+        $response->assertSee("Teams");
         $response->assertSee($this->event->public ? "Public" : "Private");
     }
 
@@ -81,6 +82,7 @@ class EditEventRulesTest extends TestCase
             'end_date' => $endDate,
             'max_users' => 12,
             'public' => true,
+            'teams' => true,
         ]);
 
         $response->assertRedirect(route('events.show', $this->event));
@@ -93,6 +95,7 @@ class EditEventRulesTest extends TestCase
             'end_date' => $endDate,
             'max_users' => 12,
             'public' => true,
+            'teams' => true,
         ]);
     }
 }
