@@ -139,12 +139,17 @@ class EventController extends Controller
      */
     public function join(Request $request, Event $event)
     {
+        // Check if the max_users has been reached
+        if ($event->users()->count() >= $event->rules->max_users) {
+            return redirect()->route('events.show', $event)->with('error', 'The event is full!');
+        }
+
         // Get the user making the request
         $user = auth()->user();
 
         // If the user is already in the event, redirect back
         if ($event->users->contains($user)) {
-            return redirect()->back()->with('error', 'You are already in the event!');
+            return redirect()->route('events.show', $event)->with('error', 'You are already in the event!');
         }
 
         // If event is public, attach the user to the event
