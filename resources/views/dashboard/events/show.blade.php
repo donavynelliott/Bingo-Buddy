@@ -53,8 +53,8 @@ use App\Enums\EventStatus;
                 <div class="p-6 text-gray-900">
                     <h2 class="text-2xl text-gray-900 font-bold mb-4">Event Members</h2>
                     @php
-                        $users = $event->users;
-                        $userCount = $users->count();
+                    $users = $event->users;
+                    $userCount = $users->count();
                     @endphp
                     <!-- Show 10 users -->
                     <div class="grid grid-cols-5 gap-4">
@@ -65,10 +65,10 @@ use App\Enums\EventStatus;
                         </ul>
                     </div>
                     @if ($userCount > 10)
-                        <a href="{{ route('events.members', ['event' => $event]) }}" class="text-gray-700 text-sm mb-4">And {{ $userCount - 10 }} more...</a>
+                    <a href="{{ route('events.members', ['event' => $event]) }}" class="text-gray-700 text-sm mb-4">And {{ $userCount - 10 }} more...</a>
                     @endif
 
-                    @if ($event->status->is(EventStatus::NotStarted) && $event->rules->teams)
+                    @if ($event->user_id == auth()->id() && $event->status->is(EventStatus::NotStarted) && $event->rules->teams)
                     <div class="p-6 text-gray-900">
                         <a href="{{ route('events.team-setup', ['event' => $event]) }}" class="bg-blue-500 text-white px-4 py-3 rounded font-medium w-full">Team Setup</a>
                     </div>

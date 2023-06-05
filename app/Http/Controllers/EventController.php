@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\EventStatus;
 use App\Models\BingoBoard;
 use App\Models\Event;
 use Illuminate\Http\Request;
@@ -201,6 +202,12 @@ class EventController extends Controller
     {
         // Get the event's users
         $users = $event->users()->get();
+
+        if ($event->status->notIn([EventStatus::NotStarted]) ||
+            $event->rules()->first()->teams === false ||
+            $event->user_id != auth()->id()) {
+            abort(404);
+        }
 
         // Return the users
         return view('dashboard.events.team-setup', compact('users', 'event'));
