@@ -1,3 +1,6 @@
+@php
+use App\Enums\EventStatus;
+@endphp
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -63,6 +66,12 @@
                     </div>
                     @if ($userCount > 10)
                         <a href="{{ route('events.members', ['event' => $event]) }}" class="text-gray-700 text-sm mb-4">And {{ $userCount - 10 }} more...</a>
+                    @endif
+
+                    @if ($event->status->is(EventStatus::NotStarted) && $event->rules->teams)
+                    <div class="p-6 text-gray-900">
+                        <a href="{{ route('events.team-setup', ['event' => $event]) }}" class="bg-blue-500 text-white px-4 py-3 rounded font-medium w-full">Team Setup</a>
+                    </div>
                     @endif
                 </div>
 

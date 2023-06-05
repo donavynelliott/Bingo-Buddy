@@ -6,12 +6,17 @@ use App\Enums\EventStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Event extends Model
 {
     use HasFactory;
 
     protected $fillable = ['name', 'user_id', 'status'];
+
+    protected $attributes = [
+        'status' => EventStatus::NotStarted
+    ];
 
     protected $casts = [
         'status' => EventStatus::class
@@ -58,6 +63,6 @@ class Event extends Model
             $eventRules->save();
         }
 
-        return $eventRules;
+        return $this->hasOne(EventRules::class);
     }
 }

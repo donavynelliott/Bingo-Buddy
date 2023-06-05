@@ -21,7 +21,7 @@ class EventUsersTest extends TestCase
             'name' => 'TestEventUserRelation',
         ]);
 
-        $rules = $event->rules();
+        $rules = $event->rules()->first();
         $rules->max_users = 10;
         $rules->save();
 

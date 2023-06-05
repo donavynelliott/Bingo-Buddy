@@ -35,7 +35,7 @@ class ShowEventRulesTest extends TestCase
             'user_id' => $this->user->id,
         ]);
 
-        $eventRules = $event->rules();
+        $eventRules = $event->rules()->first();
 
         $response = $this->get(route('events.show', $event));
         $response->assertSee($eventRules->start_date->format('F jS, Y'));

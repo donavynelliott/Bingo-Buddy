@@ -89,7 +89,7 @@ class EventTest extends TestCase
             'name' => 'Test Event',
         ]);
 
-        $this->assertEquals(EventStatus::NotStarted, $event->status);
+        $this->assertTrue($event->status->is(EventStatus::NotStarted));
     }
 
     /**
@@ -103,7 +103,7 @@ class EventTest extends TestCase
             'status' => EventStatus::NotStarted,
         ]);
 
-        $eventRules = $event->rules();
+        $eventRules = $event->rules()->first();
         $eventRules->start_date = now()->subDay();
 
         $event->save();

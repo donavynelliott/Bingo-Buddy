@@ -194,4 +194,15 @@ class EventController extends Controller
         return view('dashboard.events.members', compact('users', 'event'));
     }
 
+    /**
+     * Get the event's team setup page
+     */
+    public function teamSetup(Event $event)
+    {
+        // Get the event's users
+        $users = $event->users()->get();
+
+        // Return the users
+        return view('dashboard.events.team-setup', compact('users', 'event'));
+    }
 }
