@@ -5,6 +5,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\BingoBoardController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EventRulesController;
+use App\Http\Controllers\TeamController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -46,7 +47,8 @@ Route::prefix('dashboard')
             Route::get('/{event}/edit', [EventController::class, 'edit'])->name('events.edit');
             Route::post('/{event}/update', [EventController::class, 'update'])->name('events.update');
             Route::get('/{event}/members', [EventController::class, 'members'])->name('events.members');
-            Route::get('/{event}/team-setup', [EventController::class, 'teamSetup'])->name('events.team-setup');
+            Route::get('/{event}/team-setup', [TeamController::class, 'teamSetup'])->name('events.team-setup');
+            Route::post('/{event}/teams', [TeamController::class, 'store'])->name('events.teams.store');
         });
 
         // Bingo Boards

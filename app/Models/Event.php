@@ -65,4 +65,12 @@ class Event extends Model
 
         return $this->hasOne(EventRules::class);
     }
+
+    /**
+     * Get the Teams associated with the event.
+     */
+    public function teams()
+    {
+        return $this->hasMany(Team::class);
+    }
 }

@@ -194,22 +194,4 @@ class EventController extends Controller
         // Return the users
         return view('dashboard.events.members', compact('users', 'event'));
     }
-
-    /**
-     * Get the event's team setup page
-     */
-    public function teamSetup(Event $event)
-    {
-        // Get the event's users
-        $users = $event->users()->get();
-
-        if ($event->status->notIn([EventStatus::NotStarted]) ||
-            $event->rules()->first()->teams === false ||
-            $event->user_id != auth()->id()) {
-            abort(404);
-        }
-
-        // Return the users
-        return view('dashboard.events.team-setup', compact('users', 'event'));
-    }
 }
