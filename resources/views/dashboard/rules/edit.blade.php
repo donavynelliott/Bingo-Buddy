@@ -41,16 +41,16 @@
                     <div class="p-6 text-gray-900">
                         <x-input-label for="public" :value="__('Public Entry')" />
                         <select name="public" id="public_entry" class="block mt-1 w-full">
-                            <option value="1" {{ $eventRules->public_entry === 1 ? 'selected' : '' }}>Yes</option>
-                            <option value="0" {{ $eventRules->public_entry === 0 ? 'selected' : '' }}>No</option>
+                            <option value="1" {{ $eventRules->public == 1 ? 'selected' : '' }}>Yes</option>
+                            <option value="0" {{ $eventRules->public != 1 ? 'selected' : '' }}>No</option>
                         </select>
                     </div>
                     <!-- Teams -->
                     <div class="p-6 text-gray-900">
                         <x-input-label for="teams" :value="__('Teams')" />
                         <select name="teams" id="teams" class="block mt-1 w-full">
-                            <option value="1" {{ $eventRules->teams === 1 ? 'selected' : '' }}>Yes</option>
-                            <option value="0" {{ $eventRules->teams === 0 ? 'selected' : '' }}>No</option>
+                            <option value="1" {{ $eventRules->teams == 1 ? 'selected' : '' }}>Yes</option>
+                            <option value="0" {{ $eventRules->teams != 1 ? 'selected' : '' }}>No</option>
                         </select>
                     </div>
                     <!-- Submit Button -->

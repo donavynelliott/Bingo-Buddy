@@ -18,14 +18,6 @@
                         <x-input-label for="name" :value="__('Name')" />
                         <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="$event->name" required autofocus />
                     </div>
-                    <!-- Visibility Select -->
-                    <div class="p-6 text-gray-900">
-                        <x-input-label for="visibility" :value="__('Visibility')" />
-                        <select name="visibility" id="visibility" class="block mt-1 w-full">
-                            <option value="public" @if ($event->visibility == 'public') selected @endif>Public</option>
-                            <option value="private" @if ($event->visibility == 'private') selected @endif>Private</option>
-                        </select>
-                    </div>
                     <!-- Display checkbox for all boards owned by user -->
                     <div class="p-6 text-gray-900">
                         @foreach ($boards as $board)
