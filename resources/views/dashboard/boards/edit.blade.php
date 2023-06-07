@@ -5,18 +5,7 @@
         </h2>
     </x-slot>
 
-    <!-- Success/Error -->
-    @if (session('success'))
-    <div class="bg-green-500 p-4 rounded-lg mb-6 text-white text-center">
-        {{ session('success') }}
-    </div>
-    @endif
-
-    @if (session('error'))
-    <div class="bg-red-500 p-4 rounded-lg mb-6 text-white text-center">
-        {{ session('error') }}
-    </div>
-    @endif
+    @include('components.alert')
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -57,7 +46,7 @@
                                 </div>
                                 @endfor
                         </div>
-                        
+
                         <div class="flex justify-end mt-4">
                             <button type="submit" class="bg-teal-500 text-white px-4 py-3 rounded font-medium w-full">Update Board</button>
                         </div>

@@ -5,12 +5,7 @@
         </h2>
     </x-slot>
 
-    <!-- Success/Error -->
-    @if (session('success'))
-    <div class="bg-green-500 p-4 rounded-lg mb-6 text-white text-center">
-        {{ session('success') }}
-    </div>
-    @endif
+    @include('components.alert')
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">

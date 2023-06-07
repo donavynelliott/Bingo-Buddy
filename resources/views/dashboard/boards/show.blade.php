@@ -5,12 +5,7 @@
         </h2>
     </x-slot>
 
-    <!-- Success/Error -->
-    @if (session('success'))
-    <div class="bg-green-500 p-4 rounded-lg mb-6 text-white text-center">
-        {{ session('success') }}
-    </div>
-    @endif
+    @include('components.alert')
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -30,20 +25,20 @@
                     <!-- Create a set of square input boxes based on the size -->
                     <div class="grid grid-cols-{{ $bingoBoard->size }} divide-x divide-y border border-black h-full">
                         @php
-                            $squares = $bingoBoard->bingoSquares()->get();
+                        $squares = $bingoBoard->bingoSquares()->get();
                         @endphp
                         @for ($i = 0; $i < pow($bingoBoard->size, 2); $i++)
                             <div class="bg-white overflow-hidden border-slate-200 aspect-square flex justify-center items-center">
                                 <div class="text-gray-900 text-center">
-                                    
+
                                     @if (isset($squares[$i]))
-                                        {{ $squares[$i]->title }}
+                                    {{ $squares[$i]->title }}
                                     @else
-                                        <span class="text-gray-400">Empty</span>
+                                    <span class="text-gray-400">Empty</span>
                                     @endif
                                 </div>
                             </div>
-                        @endfor
+                            @endfor
                     </div>
 
 
