@@ -49,6 +49,16 @@ class TeamController extends Controller
                 'teams.*.users.*' => 'required|integer|exists:users,id',
             ]);
 
+            if ($event->teams()->count() > 0) {
+                // Remove all users attached to event teams
+                $event->teams()->each(function ($team) {
+                    $team->users()->detach();
+                });
+
+                // Delete all teams
+                $event->teams()->delete();
+            }
+
             // Create the teams
             foreach ($validated['teams'] as $team) {
                 $teamModel = Team::create([
