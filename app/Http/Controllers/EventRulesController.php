@@ -40,10 +40,10 @@ class EventRulesController extends Controller
 
         try {
             $input = $request->validate([
-                'start_date' => 'required|date_format:Y-m-d\TH:i',
-                'end_date' => 'required|date_format:Y-m-d\TH:i',
+                'start_date' => 'required|date_format:Y-m-d\TH:i|after:now',
+                'end_date' => 'required|date_format:Y-m-d\TH:i|after:start_date',
                 'end_condition' => 'required|in:end_date,all_boards_completed',
-                'max_users' => 'required|integer|max:1000',
+                'max_users' => 'required|integer|max:1000|min:2',
                 'public' => 'required|boolean',
                 'teams' => 'required|boolean',
             ]);
@@ -59,7 +59,7 @@ class EventRulesController extends Controller
             return redirect()->route('events.show', ['event' => $event])->with('success', 'Event rules updated successfully.');
         } catch (ValidationException $e) {
             Log::alert($e->getMessage());
-            return back()->with('error', 'There was an error updating the event rules.');
+            return back()->withErrors($e->errors());
         }
     }
 }
