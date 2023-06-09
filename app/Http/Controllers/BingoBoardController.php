@@ -113,23 +113,22 @@ class BingoBoardController extends Controller
 
         // Update the board
         $squares = $validated['squares'];
+
         foreach ($squares as $position => $square) {
-            // If a square with the same position already exists, simply update the title
-            if (isset($currentSquares[$position])) {
-                if ($currentSquares[$position]->title !== $square)
-                {
-                    $currentSquares[$position]->title = $square;
-                    $currentSquares[$position]->save();
-                }
+            if ($square === null) {
                 continue;
-            } else if ($square !== null) {
-                // otherwise, create a new BingoSquare object
-                $bingoSquare = new BingoSquare([
+            }
+
+            $currentSquare = $currentSquares->where('position', $position)->first();
+            if ($currentSquare) {
+                $currentSquare->title = $square;
+                $currentSquare->save();
+            } else {
+                BingoSquare::create([
+                    'bingo_board_id' => $bingoBoard->id,
                     'title' => $square,
                     'position' => $position,
-                    'bingo_board_id' => $bingoBoard->id
                 ]);
-                $bingoSquare->save();
             }
         }
 

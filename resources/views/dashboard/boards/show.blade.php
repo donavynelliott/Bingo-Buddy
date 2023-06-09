@@ -31,8 +31,11 @@
                             <div class="bg-white overflow-hidden border-slate-200 aspect-square flex justify-center items-center">
                                 <div class="text-gray-900 text-center">
 
-                                    @if (isset($squares[$i]))
-                                    {{ $squares[$i]->title }}
+                                    @if ($squares->contains('position', $i))
+                                        @php
+                                        $square = $squares->where('position', $i)->first();
+                                        @endphp
+                                        <span class="text-gray-900">{{ $square->title }}</span>
                                     @else
                                     <span class="text-gray-400">Empty</span>
                                     @endif

@@ -34,11 +34,16 @@
                             @php
                             $squares = $bingoBoard->bingoSquares()->get();
                             @endphp
+
                             @for ($i = 0; $i < pow($bingoBoard->size, 2); $i++)
                                 <div class="bg-white overflow-hidden border-slate-200 aspect-square flex justify-center items-center">
                                     <div class="text-gray-900 text-center">
-                                        @if ( $square = $squares[$i] ?? null )
-                                        <input type="text" name="squares[{{$i}}]" id="square-{{ $i }}" placeholder="Square {{ $i }}" class="bg-gray-100 border-2 w-full p-4 rounded-lg" value="{{ $squares[$i]->title }}">
+                                        <!-- Check if one of the squares position property is equal to $i, and assign it to a var -->
+                                        @if ($squares->contains('position', $i))
+                                        @php
+                                        $square = $squares->where('position', $i)->first();
+                                        @endphp
+                                        <input type="text" name="squares[{{$i}}]" id="square-{{ $i }}" placeholder="Square {{ $i }}" class="bg-gray-100 border-2 w-full p-4 rounded-lg" value="{{ $square->title }}">
                                         @else
                                         <input type="text" name="squares[{{$i}}]" id="square-{{ $i }}" placeholder="Square {{ $i }}" class="bg-gray-100 border-2 w-full p-4 rounded-lg">
                                         @endif

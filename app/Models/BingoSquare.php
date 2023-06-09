@@ -9,6 +9,8 @@ class BingoSquare extends Model
 {
     use HasFactory;
 
+    protected $table = 'bingo_squares';
+
     protected $fillable = [
         'bingo_board_id',
         'title',
