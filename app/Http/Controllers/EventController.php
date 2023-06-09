@@ -77,6 +77,9 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
+        if (!$event->status->is(EventStatus::NotStarted)) {
+            abort(500);
+        }
 
         // If user doesn't own the event return 403
         if ($event->user_id != auth()->id()) {
@@ -140,6 +143,10 @@ class EventController extends Controller
      */
     public function join(Request $request, Event $event)
     {
+        if (!$event->status->is(EventStatus::NotStarted)) {
+            abort(500);
+        }
+
         // Check if the max_users has been reached
         if ($event->users()->count() >= $event->rules->max_users) {
             return redirect()->route('events.show', $event)->with('error', 'The event is full!');
@@ -168,6 +175,10 @@ class EventController extends Controller
      */
     public function leave(Event $event)
     {
+        if (!$event->status->is(EventStatus::NotStarted)) {
+            abort(500);
+        }
+
         // Get the user making the request
         $user = auth()->user();
 

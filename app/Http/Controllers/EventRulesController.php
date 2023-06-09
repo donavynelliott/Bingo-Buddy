@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\EventStatus;
 use App\Models\Event;
 use App\Models\EventRules;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class EventRulesController extends Controller
     public function edit(Event $event)
     {
         $eventRules = $event->rules();
-        if (!$eventRules->exists())
+        if (!$eventRules->exists() || $event->user_id != auth()->user()->id || !$event->status->is(EventStatus::NotStarted))
         {
             abort(500);
         }
@@ -36,6 +37,11 @@ class EventRulesController extends Controller
         if ($event->user_id != $request->user()->id)
         {
             abort(403);
+        }
+
+        if (!$event->status->is(EventStatus::NotStarted))
+        {
+            abort(500);
         }
 
         try {

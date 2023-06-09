@@ -1,3 +1,8 @@
+@php
+use App\Enums\EventStatus;
+@endphp
+
+@if ($event->status->is(EventStatus::NotStarted))
 <!-- Join/Leave Event button -->
 <div class="p-6 text-gray-900">
     <!-- Leave Button -->
@@ -14,3 +19,4 @@
     </form>
     @endif
 </div>
+@endif

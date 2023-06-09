@@ -40,6 +40,11 @@ class TeamController extends Controller
             abort(403);
         }
 
+        if (!$event->status->is(EventStatus::NotStarted))
+        {
+            abort(500);
+        }
+
         try {
             $validated = request()->validate([
                 'teams' => 'required|array',
