@@ -73,4 +73,12 @@ class Event extends Model
     {
         return $this->hasMany(Team::class);
     }
+
+    /**
+     * Get whether teams are enabled
+     */
+    public function getTeamsEnabledAttribute()
+    {
+        return $this->rules()->first()->teams;
+    }
 }

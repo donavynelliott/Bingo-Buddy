@@ -5,6 +5,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\BingoBoardController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EventRulesController;
+use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\TeamController;
 use Illuminate\Support\Facades\Route;
 
@@ -65,6 +66,14 @@ Route::prefix('dashboard')
             Route::get('/edit/{event}', [EventRulesController::class, 'edit'])->name('event-rules.edit');
             Route::post('/update/{event}', [EventRulesController::class, 'update'])->name('event-rules.update');
         });
+
+        // Submissions
+        Route::prefix('submissions')->group(function() {
+            Route::get('/create/{event}/{bingoSquare}', [SubmissionController::class, 'create'])->name('submissions.create');
+            Route::post('/store/{event}/{bingoSquare}', [SubmissionController::class, 'store'])->name('submissions.store');
+            Route::get('/board/{event}/{bingoBoard}', [SubmissionController::class, 'board'])->name('submissions.board');
+        });
+
 });
 
 
