@@ -72,6 +72,7 @@ Route::prefix('dashboard')
             Route::get('/create/{event}/{bingoSquare}', [SubmissionController::class, 'create'])->name('submissions.create');
             Route::post('/store/{event}/{bingoSquare}', [SubmissionController::class, 'store'])->name('submissions.store');
             Route::get('/board/{event}/{bingoBoard}', [SubmissionController::class, 'board'])->name('submissions.board');
+            Route::get('/board/{event}/{bingoSquare}/{submittedSquare}', [SubmissionController::class, 'show'])->name('submissions.show');
         });
 
 });

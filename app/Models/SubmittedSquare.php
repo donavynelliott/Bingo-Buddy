@@ -35,6 +35,26 @@ class SubmittedSquare extends Model
     }
 
     /**
+     * Get the user that submitted the square.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the team that owns the square.
+     */
+    public function team()
+    {
+        if ($this->team_id == null) {
+            return null;
+        }
+        
+        return $this->belongsTo(Team::class);
+    }
+
+    /**
      * Find the submitted squares with the following user_id and optional team_id
      */
     public static function findWithUserAndTeam($user_id, $team_id = null)

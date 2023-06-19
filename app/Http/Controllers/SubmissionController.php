@@ -85,4 +85,13 @@ class SubmissionController extends Controller
             return redirect()->back()->withErrors($e->errors())->withInput();
         }
     }
+
+    public function show(Event $event, BingoSquare $bingoSquare, SubmittedSquare $submittedSquare)
+    {
+        return view('dashboard.submissions.show', [
+            'bingoSquare' => $bingoSquare,
+            'submittedSquare' => $submittedSquare,
+            'event' => $event,
+        ]);
+    }
 }

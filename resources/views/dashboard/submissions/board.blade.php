@@ -36,21 +36,25 @@
                                 $submittedSquare = $submitted ? $submittedSquares->where('bingo_square_id', $square->id)->first() : null;
                                 $approved = $submittedSquare ? $submittedSquare->approved : false;
                             @endphp
+                            @if ($submitted)
+                            <a href="{{ route('submissions.show', ['event' => $event, 'bingoSquare' => $square, 'submittedSquare' => $submittedSquare]) }}">
+                            @else
+                            <a href="{{ route('submissions.create', ['event' => $event, 'bingoSquare' => $square]) }}">
+                            @endif
 
-                            <div class="{{ $approved ? 'bg-green-100' : ($submittedSquare ? 'bg-yellow-50' : 'bg-white') }} overflow-hidden border-slate-200 aspect-square flex justify-center items-center">
-                                <div class="text-center">
-                                    @if ($submitted)
-                                        <p class="text-teal-500">{{ $square->title }}</p>
-                                        <p>[{{ $approved ? 'Approved' : 'Pending' }}]</p>
-                                    @else
-                                        <a href="{{ route('submissions.create', ['event' => $event, 'bingoSquare' => $square]) }}" class="text-gray-400 hover:text-teal-500">
+                                <div class="{{ $approved ? 'bg-green-100 hover:bg-green-200' : ($submittedSquare ? 'bg-yellow-50 hover:bg-yellow-100' : 'bg-white hover:bg-gray-50') }} overflow-hidden border-slate-200 aspect-square flex justify-center items-center">
+                                    <div class="text-center">
+                                        @if ($submitted)
+                                            <p class="text-teal-500">{{ $square->title }}</p>
+                                            <p class="text-gray-800">{{ !$approved ? '[Pending]' : '' }}</p>
+                                        @else
                                             <p class="text-gray-900">
                                                 {{ $square->title }}    
                                             </p>
-                                        </a>
-                                    @endif
+                                        @endif
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         @endfor
                     </div>
 
