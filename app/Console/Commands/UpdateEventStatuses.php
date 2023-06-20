@@ -3,8 +3,10 @@
 namespace App\Console\Commands;
 
 use App\Enums\EventStatus;
+use App\Models\BingoBoard;
 use App\Models\Event;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class UpdateEventStatuses extends Command
 {
@@ -31,10 +33,26 @@ class UpdateEventStatuses extends Command
         $events = Event::where('status', EventStatus::NotStarted)
             ->join('event_rules', 'events.id', '=', 'event_rules.event_id')
             ->whereDate('start_date', '<=', now())
-            ->update(['status' => EventStatus::InProgress]);
+            ->select('events.id')
+            ->get();
 
-        // Output the number of events that were updated
-        $this->info($events . ' events updated to in progress');
+        if ($events->count() > 0) {
+            // Output the number of events that were updated
+            $this->info($events->count() . ' events updated to in progress');
+
+            Event::where('status', EventStatus::NotStarted)
+                ->join('event_rules', 'events.id', '=', 'event_rules.event_id')
+                ->whereDate('start_date', '<=', now())
+                ->update(['status' => EventStatus::InProgress]);
+        }
+
+        // Check each event board and make sure any empty squares are filled
+        foreach ($events as $event) {
+            foreach ($event->bingoBoards()->get() as $bingoBoard) {
+                $emptySquares = $bingoBoard->getEmptySquares();
+                $bingoBoard->bingoSquares()->saveMany($emptySquares);
+            }
+        }
 
         // Check each event that has an end_condition of end_date and check if the end date is in the past
         Event::where('status', EventStatus::InProgress)

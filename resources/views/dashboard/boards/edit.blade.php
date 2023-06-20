@@ -29,6 +29,11 @@
                             </select>
                         </div>
 
+                        <!-- Warning that empty squares will be turned into free squares -->
+                        <div class="mb-4">
+                            <p class="text-xl text-red-500 font-bold">Warning: Empty squares will be turned into free squares once an event starts.</p>
+                        </div>
+
                         <!-- Create a set of square input boxes based on the size -->
                         <div class="grid grid-cols-{{ $bingoBoard->size }} divide-x divide-y border border-black h-full">
                             @php

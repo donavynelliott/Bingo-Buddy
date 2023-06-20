@@ -32,10 +32,14 @@
 
                             @php
                                 $square = $squares->where('position', $i)->first();
+                                if (!$square) {
+                                    break;
+                                }
                                 $submitted = $submittedSquares->contains('bingo_square_id', $square->id);
                                 $submittedSquare = $submitted ? $submittedSquares->where('bingo_square_id', $square->id)->first() : null;
                                 $approved = $submittedSquare ? $submittedSquare->approved : false;
                             @endphp
+
                             @if ($submitted)
                             <a href="{{ route('submissions.show', ['event' => $event, 'bingoSquare' => $square, 'submittedSquare' => $submittedSquare]) }}">
                             @else
@@ -54,6 +58,7 @@
                                         @endif
                                     </div>
                                 </div>
+
                             </a>
                         @endfor
                     </div>
