@@ -36,11 +36,11 @@ class TeamSetupPageTest extends TestCase
     }
 
     /**
-     * Test we can view the team setup page when the event type is teams and the event status is not started.
+     * Test we can view the team setup page when the event type is teams and the event status is open.
      */
-    public function test_can_view_team_setup_page_when_event_type_is_teams_and_event_status_is_not_started(): void
+    public function test_can_view_team_setup_page_when_event_type_is_teams_and_event_status_is_open(): void
     {      
-        $this->assertTrue($this->event->status->is(EventStatus::NotStarted));
+        $this->assertTrue($this->event->status->is(EventStatus::Open));
         $this->assertTrue($this->event->rules()->first()->teams);
 
         $this->actingAs($this->user);
@@ -53,7 +53,7 @@ class TeamSetupPageTest extends TestCase
     }
 
     /**
-     * Test we can only visit the team setup page when the event is not started and the event rules allow teams
+     * Test we can only visit the team setup page when the event is open and the event rules allow teams
      */
     public function test_cannot_view_team_setup_page_when_event_type_is_not_teams(): void
     {
@@ -63,7 +63,7 @@ class TeamSetupPageTest extends TestCase
         $rules->teams = false;
         $rules->save();
 
-        $this->assertTrue($this->event->status->is(EventStatus::NotStarted));
+        $this->assertTrue($this->event->status->is(EventStatus::Open));
         $this->assertTrue($this->event->rules()->first()->teams == false);
 
         $response = $this->get(route('events.show', $this->event));
@@ -87,8 +87,8 @@ class TeamSetupPageTest extends TestCase
      */
     public function test_cannot_view_team_setup_page_when_not_event_owner(): void
     {
-        $this->event->status = EventStatus::NotStarted;
-        $this->assertTrue($this->event->status->is(EventStatus::NotStarted));
+        $this->event->status = EventStatus::Open;
+        $this->assertTrue($this->event->status->is(EventStatus::Open));
         $this->assertTrue($this->event->rules()->first()->teams);
 
         $this->actingAs($this->user);

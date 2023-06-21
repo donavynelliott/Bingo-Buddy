@@ -158,7 +158,7 @@ class ShowEventTest extends TestCase
         $response = $this->get('/dashboard/events/' . $event->id);
 
         $response->assertSee('Status');
-        $response->assertSee('Not Started');
+        $response->assertSee('Setup');
 
         $event->status = EventStatus::InProgress;
         $event->save();

@@ -15,7 +15,7 @@ class Event extends Model
     protected $fillable = ['name', 'user_id', 'status'];
 
     protected $attributes = [
-        'status' => EventStatus::NotStarted
+        'status' => EventStatus::Setup
     ];
 
     protected $casts = [

@@ -32,10 +32,10 @@
                                 <div class="text-gray-900 text-center">
 
                                     @if ($squares->contains('position', $i))
-                                        @php
-                                        $square = $squares->where('position', $i)->first();
-                                        @endphp
-                                        <span class="text-gray-900">{{ $square->title }}</span>
+                                    @php
+                                    $square = $squares->where('position', $i)->first();
+                                    @endphp
+                                    <span class="text-gray-900">{{ $square->title }}</span>
                                     @else
                                     <span class="text-gray-400">Empty</span>
                                     @endif
@@ -48,7 +48,7 @@
                     <!-- Edit Button if owner -->
                     @if ($bingoBoard->user_id === Auth::user()->id)
                     <div class="flex justify-end mt-4">
-                        <a href="{{ route('boards.edit', ['bingoBoard' => $bingoBoard]) }}" class="bg-teal-500 text-white px-4 py-3 rounded font-medium w-full">Edit Board</a>
+                        <a href="{{ route('boards.edit', ['bingoBoard' => $bingoBoard]) }}" class="bg-pink-500 text-white px-4 py-3 rounded font-medium w-full">Edit Board</a>
                     </div>
                     @endif
 

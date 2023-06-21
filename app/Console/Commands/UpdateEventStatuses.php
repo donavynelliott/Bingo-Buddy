@@ -30,7 +30,7 @@ class UpdateEventStatuses extends Command
     public function handle()
     {
         // Check each event that has not started and check if the start date is in the past
-        $events = Event::where('status', EventStatus::NotStarted)
+        $events = Event::where('status', EventStatus::Open)
             ->join('event_rules', 'events.id', '=', 'event_rules.event_id')
             ->whereDate('start_date', '<=', now())
             ->select('events.id')
@@ -40,7 +40,7 @@ class UpdateEventStatuses extends Command
             // Output the number of events that were updated
             $this->info($events->count() . ' events updated to in progress');
 
-            Event::where('status', EventStatus::NotStarted)
+            Event::where('status', EventStatus::Open)
                 ->join('event_rules', 'events.id', '=', 'event_rules.event_id')
                 ->whereDate('start_date', '<=', now())
                 ->update(['status' => EventStatus::InProgress]);

@@ -12,9 +12,9 @@ use BenSampo\Enum\Enum;
 final class EventStatus extends Enum
 {
     /**
-     * @enum(description="Event has not started")
+     * @enum(description="Event is being setup")
      */
-    const NotStarted =   0;
+    const Setup =   0;
     /**
      * @enum(description="Event is in progress")
      */
@@ -31,4 +31,8 @@ final class EventStatus extends Enum
      * @enum(description="Event has been archived")
      */
     const Archived =     4;
+    /**
+     * @enum(description="Event is open to join")
+     */
+    const Open =         5;
 }

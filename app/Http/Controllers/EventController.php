@@ -6,6 +6,7 @@ use App\Enums\EventStatus;
 use App\Models\BingoBoard;
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
@@ -16,7 +17,27 @@ class EventController extends Controller
      */
     public function index()
     {
-        //
+        $select = [
+            'events.id',
+            'events.name',
+            'events.status',
+            'event_rules.start_date',
+            'event_rules.end_date',
+            'event_rules.end_condition',
+            'event_rules.max_users',
+            'users.name AS host_name',
+            DB::raw('(SELECT COUNT(*) FROM event_user WHERE event_user.event_id = events.id) AS users_count'),
+        ];
+
+        $events = Event::where('status', EventStatus::Open)
+            ->join('event_rules', 'events.id', '=', 'event_rules.event_id')
+            ->leftJoin('users', 'events.user_id', '=', 'users.id')
+            ->where('public', true)
+            ->whereDate('start_date', '>', now())
+            ->select($select)
+            ->get();
+
+        return view('dashboard.events.index', compact('events'));
     }
 
     /**
@@ -77,7 +98,7 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
-        if (!$event->status->is(EventStatus::NotStarted)) {
+        if (!$event->status->is(EventStatus::Setup)) {
             abort(500);
         }
 
@@ -89,30 +110,33 @@ class EventController extends Controller
         // Validate the input
         try {
             $input = $request->validate([
-                'bingo_board_ids' => 'required|exists:bingo_boards,id',
+                'bingo_board_ids' => 'exists:bingo_boards,id',
                 'name' => 'required|max:255|string',
             ]);
 
-            // For each bingo_board_id
-            foreach ($input['bingo_board_ids'] as $bingo_board_id) {
-                $bingoBoard = BingoBoard::find($bingo_board_id);
-                // If board is null, give 500
-                if ($bingoBoard == null) {
-                    abort(500);
+        
+            if (isset($input['bingo_board_ids'])) {
+                // For each bingo_board_id
+                foreach ($input['bingo_board_ids'] as $bingo_board_id) {
+                    $bingoBoard = BingoBoard::find($bingo_board_id);
+                    // If board is null, give 500
+                    if ($bingoBoard == null) {
+                        abort(500);
+                    }
+
+                    // If board is not owned by the user, give 403
+                    if ($bingoBoard->user_id != auth()->id()) {
+                        abort(403);
+                    }
+
+                    $boardsToAttach[] = $bingoBoard;
                 }
 
-                // If board is not owned by the user, give 403
-                if ($bingoBoard->user_id != auth()->id()) {
-                    abort(403);
-                }
-
-                $boardsToAttach[] = $bingoBoard;
-            }
-
-            // Attach the bingo board to the event
-            foreach ($boardsToAttach as $board) {
-                if (!$event->bingoBoards->contains($board)) {
-                    $event->bingoBoards()->attach($board);
+                // Attach the bingo board to the event
+                foreach ($boardsToAttach as $board) {
+                    if (!$event->bingoBoards->contains($board)) {
+                        $event->bingoBoards()->attach($board);
+                    }
                 }
             }
 
@@ -120,7 +144,7 @@ class EventController extends Controller
             $event->save();
 
             // Redirect to the event page
-            return redirect()->route('events.show', $event)->with('success', 'Bingo board has been attached to the event!');
+            return redirect()->route('events.show', $event)->with('success', 'Event has been updated!');
         } catch (ValidationException $e) {
             Log::error('Validation error', [
                 'exception' => $e,
@@ -143,7 +167,7 @@ class EventController extends Controller
      */
     public function join(Request $request, Event $event)
     {
-        if (!$event->status->is(EventStatus::NotStarted)) {
+        if (!$event->status->is(EventStatus::Open)) {
             abort(500);
         }
 
@@ -175,7 +199,7 @@ class EventController extends Controller
      */
     public function leave(Event $event)
     {
-        if (!$event->status->is(EventStatus::NotStarted)) {
+        if (!$event->status->is(EventStatus::Open)) {
             abort(500);
         }
 
@@ -204,5 +228,32 @@ class EventController extends Controller
 
         // Return the users
         return view('dashboard.events.members', compact('users', 'event'));
+    }
+
+    /**
+     * Set the status of the event to open
+     */
+    public function open(Event $event)
+    {
+        if (!$event->status->is(EventStatus::Setup)) {
+            abort(500);
+        }
+
+        // If user doesn't own the event return 403
+        if ($event->user_id != auth()->id()) {
+            return abort(403);
+        }
+
+        // If the event doesn't have any bingo boards, redirect back
+        if ($event->bingoBoards->count() == 0) {
+            return redirect()->route('events.show', $event)->withErrors('The event needs at least one bingo board!');
+        }
+
+        // Set the status of the event to open
+        $event->status = EventStatus::Open;
+        $event->save();
+
+        // Redirect to the event page
+        return redirect()->route('events.show', $event)->with('success', 'The event has been opened!');
     }
 }

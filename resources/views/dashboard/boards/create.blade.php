@@ -37,7 +37,7 @@
                             </select>
                         </div>
                         <div>
-                            <button type="submit" class="bg-teal-500 text-white px-4 py-3 rounded font-medium w-full">Create Board</button>
+                            <button type="submit" class="bg-pink-500 text-white px-4 py-3 rounded font-medium w-full">Create Board</button>
                         </div>
                     </form>
                 </div>

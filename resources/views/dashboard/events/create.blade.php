@@ -18,22 +18,8 @@
                             <label for="name" class="sr-only">Name</label>
                             <input type="text" name="name" id="name" placeholder="Event Name" class="bg-gray-100 border-2 w-full p-4 rounded-lg" value="">
                         </div>
-                        <div class="mb-4">
-                            <label for="visibility" class="sr-only">Visibility</label>
-                            <select name="visibility" id="visibility" class="bg-gray-100 border-2 w-full p-4 rounded-lg">
-                                <option value="public">Public</option>
-                                <option value="private">Private</option>
-                            </select>
-                        </div>
-                        <div class="mb-4">
-                            <label for="type" class="sr-only">Type</label>
-                            <select name="type" id="type" class="bg-gray-100 border-2 w-full p-4 rounded-lg">
-                                <option value="bingo">Bingo</option>
-                                <option value="raffle">Raffle</option>
-                            </select>
-                        </div>
                         <div>
-                            <button type="submit" class="bg-teal-500 text-white px-4 py-3 rounded font-medium w-full">Create Event</button>
+                            <button type="submit" class="bg-indigo-500 text-white px-4 py-3 rounded font-medium w-full">Create Event</button>
                         </div>
                     </form>
                 </div>

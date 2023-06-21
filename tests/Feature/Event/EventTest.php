@@ -80,16 +80,16 @@ class EventTest extends TestCase
     }
 
     /**
-     * Test that an event has a default status of NotStarted
+     * Test that an event has a default status of Setup
      */
-    public function test_event_model_has_default_status_of_not_started(): void
+    public function test_event_model_has_default_status_of_setup(): void
     {
         $event = Event::factory()->create([
             'user_id' => $this->user->id,
             'name' => 'Test Event',
         ]);
 
-        $this->assertTrue($event->status->is(EventStatus::NotStarted));
+        $this->assertTrue($event->status->is(EventStatus::Setup));
     }
 
     /**
@@ -100,7 +100,7 @@ class EventTest extends TestCase
         $event = Event::factory()->create([
             'user_id' => $this->user->id,
             'name' => 'Test Event',
-            'status' => EventStatus::NotStarted,
+            'status' => EventStatus::Open,
         ]);
 
         $eventRules = $event->rules()->first();
@@ -109,7 +109,7 @@ class EventTest extends TestCase
         $event->save();
         $eventRules->save();
 
-        $this->assertEquals(EventStatus::NotStarted, $event->status->value);
+        $this->assertEquals(EventStatus::Open, $event->status->value);
 
         // Run UpdateEventsStatuses job
         $this->artisan('app:update-event-statuses')

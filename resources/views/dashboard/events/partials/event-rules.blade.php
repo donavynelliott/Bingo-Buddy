@@ -12,9 +12,9 @@ use App\Enums\EventStatus;
     <p class="text-gray-700 text-sm mb-4">Teams: {{ $event->rules->teams ? "Teams" : "Individuals" }}</p>
 
     <!-- Edit button if owner -->
-    @if ($event->user_id == auth()->id() && $event->status->is(EventStatus::NotStarted))
-    <div class="p-6 text-gray-900">
-        <a href="{{ route('event-rules.edit', ['event' => $event]) }}" class="bg-blue-500 text-white px-4 py-3 rounded font-medium w-full">Edit Rules</a>
+    @if ($event->user_id == auth()->id() && $event->status->is(EventStatus::Setup))
+    <div class="py-6 text-gray-900">
+        <a href="{{ route('event-rules.edit', ['event' => $event]) }}" class="bg-orange-600 text-white px-4 py-3 rounded font-medium w-full">Edit Rules</a>
     </div>
     @endif
 </div>

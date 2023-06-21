@@ -20,7 +20,7 @@ class TeamController extends Controller
         $users = $event->users()->get();
 
         if (
-            $event->status->notIn([EventStatus::NotStarted]) ||
+            $event->status->notIn([EventStatus::Open]) ||
             $event->rules()->first()->teams === false ||
             $event->user_id != auth()->id()
         ) {
@@ -40,7 +40,7 @@ class TeamController extends Controller
             abort(403);
         }
 
-        if (!$event->status->is(EventStatus::NotStarted))
+        if (!$event->status->is(EventStatus::Open))
         {
             abort(500);
         }

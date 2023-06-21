@@ -48,9 +48,9 @@
                                         @php
                                         $square = $squares->where('position', $i)->first();
                                         @endphp
-                                        <input type="text" name="squares[{{$i}}]" id="square-{{ $i }}" placeholder="Square {{ $i }}" class="bg-gray-100 border-2 w-full p-4 rounded-lg" value="{{ $square->title }}">
+                                        <input type="text" name="squares[{{$i}}]" id="square-{{ $i }}" placeholder="Square {{ $i + 1 }}" class="bg-gray-100 border-2 w-full p-4 rounded-lg" value="{{ $square->title }}">
                                         @else
-                                        <input type="text" name="squares[{{$i}}]" id="square-{{ $i }}" placeholder="Square {{ $i }}" class="bg-gray-100 border-2 w-full p-4 rounded-lg">
+                                        <input type="text" name="squares[{{$i}}]" id="square-{{ $i }}" placeholder="Square {{ $i + 1}}" class="bg-gray-100 border-2 w-full p-4 rounded-lg">
                                         @endif
                                     </div>
                                 </div>
@@ -58,7 +58,7 @@
                         </div>
 
                         <div class="flex justify-end mt-4">
-                            <button type="submit" class="bg-teal-500 text-white px-4 py-3 rounded font-medium w-full">Update Board</button>
+                            <button type="submit" class="bg-pink-500 text-white px-4 py-3 rounded font-medium w-full">Update Board</button>
                         </div>
                     </form>
                 </div>

@@ -39,11 +39,13 @@ Route::prefix('dashboard')
 
         // Events
         Route::prefix('events')->group(function() {
+            Route::get('/', [EventController::class, 'index'])->name('events.index');
             Route::get('/create', [EventController::class, 'create'])->name('events.create');
             Route::post('/store', [EventController::class, 'store'])->name('events.store');
             Route::get('/{event}', [EventController::class, 'show'])->name('events.show');
             Route::post('/{event}/join', [EventController::class, 'join'])->name('events.join');
             Route::post('/{event}/leave', [EventController::class, 'leave'])->name('events.leave');
+            Route::post('/{event}/open', [EventController::class, 'open'])->name('events.open');
             Route::post('/{event}/boards', [EventController::class, 'attachBoard'])->name('events.boards.attach');
             Route::get('/{event}/edit', [EventController::class, 'edit'])->name('events.edit');
             Route::post('/{event}/update', [EventController::class, 'update'])->name('events.update');

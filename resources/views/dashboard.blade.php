@@ -12,6 +12,13 @@
                     {{ __("You're logged in!") }}
                 </div>
 
+                <!-- Create New Event / New Board -->
+                <div class="p-6 text-gray-900">
+                    <a href="{{ route('events.create') }}" class="bg-indigo-500 text-white px-4 py-3 rounded font-medium w-full">Create New Event</a>
+                    <a href="{{ route('boards.create') }}" class="bg-pink-500 text-white px-4 py-3 rounded font-medium w-full">Create New Board</a>
+                </div>
+
+
                 <!-- Display any events that the user is attached to -->
                 @if ($memberEvents->count() > 0)
                 <div class="p-6 text-gray-900">

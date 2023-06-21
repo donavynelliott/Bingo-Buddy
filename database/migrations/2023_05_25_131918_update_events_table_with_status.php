@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->integer('status')->default(EventStatus::NotStarted);
+            $table->integer('status')->default(EventStatus::Setup);
         });
     }
 

@@ -17,7 +17,7 @@ class EventRulesController extends Controller
     public function edit(Event $event)
     {
         $eventRules = $event->rules();
-        if (!$eventRules->exists() || $event->user_id != auth()->user()->id || !$event->status->is(EventStatus::NotStarted))
+        if (!$eventRules->exists() || $event->user_id != auth()->user()->id || !$event->status->is(EventStatus::Setup))
         {
             abort(500);
         }
@@ -39,7 +39,7 @@ class EventRulesController extends Controller
             abort(403);
         }
 
-        if (!$event->status->is(EventStatus::NotStarted))
+        if (!$event->status->is(EventStatus::Setup))
         {
             abort(500);
         }
